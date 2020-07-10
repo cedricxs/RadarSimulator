@@ -4,7 +4,7 @@
 Module implementing MainWindow.
 """
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5 import  QtWidgets
 from PyQt5.QtWidgets import QMainWindow
 from Plot_Widget import Plot_Widget, Plot_Widget3D_Matplt
@@ -12,6 +12,7 @@ from Ui_MainWindow import Ui_MainWindow
 from logDistribution import LogDistribution
 import numpy as np
 from doppler import Doppler
+from logReturnRadar import LogReturnRadar
 from Mayavi_Widget import MayaviQWidget, Visualization
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
@@ -24,17 +25,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         @param parent reference to the parent widget
         @type QWidget
         """
-        self.count = 1
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
+        #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setup2DPlotWidget()
         self.setup3DPlotWidget()
         self.setupDopplerWidget()
+        self.setupLogReturnRadarWidget()
         self.log_normal = LogDistribution()
         self.doppler = Doppler()
         self.doppler_count = 0
+        self.logReturnRadar = LogReturnRadar()
         self.stackedWidget_2.setCurrentIndex(0)
-        self.tabWidget.setCurrentIndex(0)
         self.radioButton.setChecked(True)
         self.radioButton_7.setChecked(True)
         self.dynSystemeData()
@@ -63,11 +65,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
     def setupDopplerWidget(self):
         self.doppler_plot_widget = Plot_Widget(self.widget_24)
-        
+    def setupLogReturnRadarWidget(self):
+        self.logReturnRadar_plot_widget = Plot_Widget(self.widget_21)
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
         self.plot3d_widget = MayaviQWidget(self.widget_19)
-        self.plot3d_widget.move(-30, -30)
         pass
         
     def plot3D(self):
@@ -96,20 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.plot_widget3.updateData([fre, psd, powerf], 'Spectrum', 'Frquency', 'Power Spectral Density')
         else:
             pass
-    @pyqtSlot(int)
-    def on_tabWidget_currentChanged(self, index):
-        """
-        Slot documentation goes here.
-        
-        @param index DESCRIPTION
-        @type int
-        """
-        #self.update()
-        if self.count == 1:
-            self.count = -1
-        else:
-            self.count == 1
-        self.resize(self.size().width(), self.size().height()+self.count)
+    
     
     @pyqtSlot()
     def on_pushButton_clicked(self):
@@ -133,35 +122,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.log_normal.setMuc(float(self.lineEdit_2.text()))
 
     def resizeEvent(self, event):
-        if self.tabWidget.currentIndex() == 0:
-            if self.stackedWidget_2.currentIndex() ==  0:
-               self.plot_widget1.resize(self.plot_widget1.parent().size())
-               self.plot_widget2.resize(self.plot_widget2.parent().size())
-               self.plot_widget3.resize(self.plot_widget3.parent().size())
-            elif self.stackedWidget_2.currentIndex() ==  1:
-               self.plot_widget4.resize(self.plot_widget4.parent().size())
-               self.plot_widget5.resize(self.plot_widget5.parent().size())
-               self.plot_widget6.resize(self.plot_widget6.parent().size())
-            elif self.stackedWidget_2.currentIndex() ==  2:
-               self.plot_widget7.resize(self.plot_widget7.parent().size())
-               self.plot_widget8.resize(self.plot_widget8.parent().size())
-               self.plot_widget9.resize(self.plot_widget9.parent().size())
-            elif self.stackedWidget_2.currentIndex() ==  3:
-               self.plot_widget10.resize(self.plot_widget10.parent().size())
-               self.plot_widget11.resize(self.plot_widget11.parent().size())
-               self.plot_widget12.resize(self.plot_widget12.parent().size())
-            elif self.stackedWidget_2.currentIndex() ==  4:
-                self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
-            elif self.stackedWidget_2.currentIndex() ==  5:
-                self.plot3d_widget.updateSize()
-        elif self.tabWidget.currentIndex() == 1:
-            pass
+        if self.stackedWidget_2.currentIndex() ==  0:
+           self.plot_widget1.resize(self.plot_widget1.parent().size())
+           self.plot_widget2.resize(self.plot_widget2.parent().size())
+           self.plot_widget3.resize(self.plot_widget3.parent().size())
+        elif self.stackedWidget_2.currentIndex() ==  1:
+           self.plot_widget4.resize(self.plot_widget4.parent().size())
+           self.plot_widget5.resize(self.plot_widget5.parent().size())
+           self.plot_widget6.resize(self.plot_widget6.parent().size())
+        elif self.stackedWidget_2.currentIndex() ==  2:
+           self.plot_widget7.resize(self.plot_widget7.parent().size())
+           self.plot_widget8.resize(self.plot_widget8.parent().size())
+           self.plot_widget9.resize(self.plot_widget9.parent().size())
+        elif self.stackedWidget_2.currentIndex() ==  3:
+           self.plot_widget10.resize(self.plot_widget10.parent().size())
+           self.plot_widget11.resize(self.plot_widget11.parent().size())
+           self.plot_widget12.resize(self.plot_widget12.parent().size())
+        elif self.stackedWidget_2.currentIndex() ==  4:
+            self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
+        elif self.stackedWidget_2.currentIndex() ==  5:
+            self.plot3d_widget.updateSize()
     def lancer():
         import sys
         app = QtWidgets.QApplication(sys.argv)
         mainWindow = MainWindow()
         mainWindow.show()
-        mainWindow.resize(880, 600)
+        #mainWindow.resize(880, 600)
         sys.exit(app.exec_())
     
     @pyqtSlot()
@@ -218,6 +204,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.stackedWidget_2.setCurrentIndex(5)
         self.radioButton_9.setChecked(True)
+        self.plot3d_widget.updateSize()
     @pyqtSlot()
     def on_commandLinkButton_clicked(self):
         """
@@ -292,9 +279,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         x, y, z = self.doppler.calcul(self.doppler_count)
         self.doppler_plot_widget.draw_doppler(x, y, z, self.doppler_count)
+        if self.doppler_count == 0:
+            x, y, z = self.logReturnRadar.calcul()
+            self.logReturnRadar_plot_widget.draw_logReturnRadar(x, y, z)
         self.doppler_count += 1
         if self.doppler_count ==14:
             self.doppler_count = 0
+        
     
     @pyqtSlot()
     def on_radioButton_11_clicked(self):

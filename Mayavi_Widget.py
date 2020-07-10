@@ -55,7 +55,7 @@ class Visualization(HasTraits):
             #这里如果是mesh则为z, 如果surf则为scalar
             yield
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene),
-                     height=10, width=10, show_label=False),
+                     height=1, width=1, show_label=False),
                 resizable=True , x=0, y=0)
     
     

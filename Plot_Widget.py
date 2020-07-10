@@ -16,11 +16,13 @@ class Plot_Widget(FigureCanvasQTAgg):
         
     def updateData(self, data, axe_title = '', axe_xlabel = '',  axe_ylabel = ''):
         self.clear()
-        self.text = Text(0, 0, '', fontsize=9, fontfamily='黑体')
+        self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')
         self.axe.add_artist(self.text)
-        self.axe.set_title(axe_title)
-        self.axe.set_xlabel(axe_xlabel)
-        self.axe.set_ylabel(axe_ylabel)
+        self.axe.set_title(axe_title, fontsize=9, color='white', fontweight='bold')
+        self.axe.set_xlabel(axe_xlabel, fontsize='x-small', color='white', fontweight='semibold')
+        self.axe.set_ylabel(axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
+        self.axe.xaxis.set_tick_params(labelsize=6, colors='white')
+        self.axe.yaxis.set_tick_params(labelsize=9, colors='white')
         if type(data).__name__=='list':
 #            # u and v are parametric variables.
 #            # u is an array from 0 to 2*pi, with 100 elements
@@ -47,12 +49,24 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.clean = False
 
     def draw_doppler(self, x, y, z, rangebin):
-        self.axe.set_title('time doppler - range{}'.format(rangebin+1));
-        self.axe.set_xlabel('time(s)');
-        self.axe.set_ylabel('doppler(m/s)');
+        self.clear()
+        self.axe.set_title('time doppler - range{}'.format(rangebin+1), color='white', fontweight='bold');
+        self.axe.set_xlabel('time(s)', color='white', fontweight='semibold');
+        self.axe.set_ylabel('doppler(m/s)', color='white', fontweight='semibold');
+        self.axe.xaxis.set_tick_params( colors='white')
+        self.axe.yaxis.set_tick_params(  colors='white')
         self.axe.pcolormesh(x, y, z, cmap='jet')
         self.draw()
-
+    
+    def draw_logReturnRadar(self, x, y, z):
+        self.clear()
+        self.axe.set_title('log return radar', color='white', fontweight='bold');
+        self.axe.set_xlabel('time(s)', color='white', fontweight='semibold');
+        self.axe.set_ylabel('distance', color='white', fontweight='semibold');
+        self.axe.xaxis.set_tick_params( colors='white')
+        self.axe.yaxis.set_tick_params(  colors='white')
+        self.axe.pcolormesh(x, y, z, cmap='jet')
+        self.draw()
     
     def mousemove_handler(self, event):
         'on mouse movement'

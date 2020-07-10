@@ -102,8 +102,7 @@ class Doppler:
           self.xx, self.yy = np.meshgrid(x_time,doppl)
         
         return [self.xx, self.yy, self.logTD]
-        #end
-        #end
+
 if __name__ == '__main__':    
     from matplotlib import pyplot as plt
     fig = plt.figure()
