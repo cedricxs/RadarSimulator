@@ -206,7 +206,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.radioButton_9.setChecked(True)
         self.plot3d_widget.updateSize()
     @pyqtSlot()
-    def on_commandLinkButton_clicked(self):
+    def on_pushButton_2_clicked(self):
         """
         Slot documentation goes here.
         """
