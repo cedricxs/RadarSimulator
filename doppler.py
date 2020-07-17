@@ -38,8 +38,8 @@ class Doppler:
         #%[I,Q]=ipixcdf(nc,txpol,rangebin);
         from ipixLoader import ipixLoader 
         [I,Q,meanIQ,stdIQ,inbal] = ipixLoader(self.data,self.pol,rangebin,self.mode);
-        R = abs(I + 1j * Q);
-        r = R / max(R);
+        #R = abs(I + 1j * Q);
+        #r = R / max(R);
 
         N=I.shape[0];#%r=size(A,1)该语句返回的时矩阵A的行数， c=size(A,2) 该语句返回的时矩阵A的列数。
         #
@@ -51,7 +51,7 @@ class Doppler:
         #%对于复数，分别对实部和虚部取整
         #
         # short time fourier transforms
-        hw=np.hamming(wdw);#设置汉明窗，wdw为汉明窗的长度
+        #hw=np.hamming(wdw);#设置汉明窗，wdw为汉明窗的长度
         TD=np.zeros([math.floor(wdw/yavg),M]);#B = zeros(m,n) or B = zeros([m n])  返回一个m x n的零矩阵
          
         leny=yavg*math.floor(wdw/yavg);

@@ -13,7 +13,7 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.setStyleSheet('FigureCanvasQTAgg{background:rgba(0,0,0,0)}')
         self.mousemove = self.mpl_connect('motion_notify_event', self.mousemove_handler)
         self.clean = True
-        
+   
     def updateData(self, data, axe_title = '', axe_xlabel = '',  axe_ylabel = ''):
         self.clear()
         self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')

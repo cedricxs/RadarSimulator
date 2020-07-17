@@ -6,19 +6,17 @@ import numpy as np
 from mayavi import mlab
 #s = mlab.surf(x, y, z)
 #mlab.show()
-import numpy as np
-from mayavi import mlab
-x, y = np.mgrid[0:3:1,0:3:1]
-s = mlab.surf(x, y, np.asarray(x*0.1, 'd'))
-
-@mlab.animate
-def anim():
-    for i in range(10):
-        s.mlab_source.scalars = x*i
-        yield
-
-anim()
-mlab.show()
+#x, y = np.mgrid[0:3:1,0:3:1]
+#s = mlab.surf(x, y, np.asarray(x*0.1, 'd'))
+#
+#@mlab.animate
+#def anim():
+#    for i in range(10):
+#        s.mlab_source.scalars = x*i
+#        yield
+#
+#anim()
+#mlab.show()
 # Produce some nice data.
 #n_mer, n_long = 6, 11
 #pi = np.pi
@@ -39,3 +37,20 @@ mlab.show()
 #                                      np.pi*(i+1)/5.)*0.5)
 #    scalars = np.sin(mu + np.pi*(i+1)/5)
 #    ms.trait_set(x=x, scalars=scalars)
+import numpy as np
+from mayavi import mlab
+@mlab.show
+@mlab.animate(delay = 100, ui = False)
+def updateAnimation():
+    t = 0.0
+    print(1)
+    while True:
+        ball.mlab_source.set(x = np.cos(t), y = np.sin(t), z = 0)
+        
+        t += 0.1
+        yield
+
+ball = mlab.points3d(np.array(1.), np.array(0.), np.array(0.))
+
+updateAnimation()
+mlab.show()

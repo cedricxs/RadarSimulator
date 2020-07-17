@@ -17,6 +17,7 @@ class Visualization(HasTraits):
     seaData = SeaData()    
     nRL_SigmaSea_Calculeur = NRL_SigmaSea_Calculeur()
     def __init__(self):
+        self.animated = False
         self.plotStatus = 0
         super().__init__()
     @on_trait_change('scene.activated')
@@ -41,9 +42,10 @@ class Visualization(HasTraits):
         else:
             nrl = Visualization.nRL_SigmaSea_Calculeur.calculer(self.z)
             self.obj = surf(self.x, self.y,nrl, colormap='blue-red') 
-        
-    @mlab.animate(delay=100, ui=True)
+ 
+    @mlab.animate(delay=40, ui=True)
     def animation(self):
+        self.animated = True
         while True:
             [self.x, self.y , self.z] = Visualization.seaData.getSeaData()
             ms = self.obj.mlab_source
@@ -68,7 +70,7 @@ class MayaviQWidget(QtGui.QWidget):
 
         self.ui = self.visualization.edit_traits(parent=self,
                                                  kind='subpanel').control
-        self.ui.move(0, 0)
+        self.ui.move(0, -20)
         self.ui.setParent(self)
         self.resize(parent.size())
         self.ui.resize(parent.size())

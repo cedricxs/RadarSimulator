@@ -37,7 +37,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.doppler_count = 0
         self.logReturnRadar = LogReturnRadar()
         self.stackedWidget_2.setCurrentIndex(0)
-        self.radioButton.setChecked(True)
         self.radioButton_7.setChecked(True)
         self.dynSystemeData()
     
@@ -70,7 +69,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
         self.plot3d_widget = MayaviQWidget(self.widget_19)
-        pass
         
     def plot3D(self):
         #x, y = np.meshgrid(np.arange(-2, 2, 0.05),  np.arange(-2, 2, 0.05))
@@ -90,12 +88,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update(self):
         if self.stackedWidget_2.currentIndex() ==  0:
             self.log_normal.updateData()
-            xdata = self.log_normal.xdata
             xaxis1, xpdf1, th_val = self.log_normal.xaxis1, self.log_normal.xpdf1, self.log_normal.th_val
             fre, psd, powerf = self.log_normal.freqx, self.log_normal.psd_dat, self.log_normal.powerf
-            self.plot_widget1.updateData(xdata, 'Log-normal Distribution time Domaine', 'Time', 'Amplitude')
             self.plot_widget2.updateData([xaxis1, xpdf1, th_val],  'Probability Distribution', 'Amplitude', 'Probability Density')
             self.plot_widget3.updateData([fre, psd, powerf], 'Spectrum', 'Frquency', 'Power Spectral Density')
+            
+            xdata = np.array(Visualization.nRL_SigmaSea_Calculeur.sample_data)
+            self.plot_widget1.updateData(xdata, 'Log-normal Distribution time Domaine', 'Time', 'Amplitude')
+            
         else:
             pass
     
@@ -112,14 +112,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        print(self.lineEdit.text())
+        #print(self.lineEdit.text())
     
     @pyqtSlot()
     def on_lineEdit_2_editingFinished(self):
         """
         Slot documentation goes here.
         """
-        self.log_normal.setMuc(float(self.lineEdit_2.text()))
+        #self.log_normal.setMuc(float(self.lineEdit_2.text()))
 
     def resizeEvent(self, event):
         if self.stackedWidget_2.currentIndex() ==  0:
@@ -189,22 +189,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        if self.radioButton.isChecked():
-            self.stackedWidget_2.setCurrentIndex(0)
-        elif self.radioButton_2.isChecked():
-            self.stackedWidget_2.setCurrentIndex(1)
-        elif self.radioButton_3.isChecked():
-            self.stackedWidget_2.setCurrentIndex(3)
+        #if self.radioButton.isChecked():
+        self.stackedWidget_2.setCurrentIndex(0)
+        #elif self.radioButton_2.isChecked():
+        #self.stackedWidget_2.setCurrentIndex(1)
+        #elif self.radioButton_3.isChecked():
+        #self.stackedWidget_2.setCurrentIndex(3)
         
     
-    @pyqtSlot()
-    def on_radioButton_8_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(5)
-        self.radioButton_9.setChecked(True)
-        self.plot3d_widget.updateSize()
     @pyqtSlot()
     def on_pushButton_2_clicked(self):
         """
@@ -217,36 +209,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
+        self.stackedWidget_2.setCurrentIndex(5)
         self.plot3d_widget.visualization.plotStatus = 0
         self.plot3d_widget.visualization.plot_static()
+        self.plot3d_widget.updateSize()
     
     @pyqtSlot()
     def on_radioButton_10_clicked(self):
         """
         Slot documentation goes here.
         """
+        self.stackedWidget_2.setCurrentIndex(5)
         self.plot3d_widget.visualization.plotStatus = 1
         self.plot3d_widget.visualization.plot_static()
+        self.plot3d_widget.updateSize()
     
-    @pyqtSlot(str)
-    def on_lineEdit_11_textChanged(self, p0):
+    @pyqtSlot()
+    def on_lineEdit_11_editingFinished(self):
         """
         Slot documentation goes here.
         
         @param p0 DESCRIPTION
         @type str
         """
-        Visualization.seaData.fengji = int(p0)
+        Visualization.seaData.set_fengji(int(self.lineEdit_11.text()))
     
-    @pyqtSlot(str)
-    def on_lineEdit_22_textChanged(self, p0):
+    @pyqtSlot()
+    def on_lineEdit_22_editingFinished(self):
         """
         Slot documentation goes here.
         
         @param p0 DESCRIPTION
         @type str
         """
-        Visualization.nRL_SigmaSea_Calculeur.fGHz =  int(p0)
+        Visualization.nRL_SigmaSea_Calculeur.fGHz =  int(self.lineEdit_22.text())
     
     @pyqtSlot(int)
     def on_comboBox_currentIndexChanged(self, index):
@@ -262,15 +258,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Visualization.nRL_SigmaSea_Calculeur.Pol = 'H'
         print(Visualization.nRL_SigmaSea_Calculeur.Pol)
     
-    @pyqtSlot(str)
-    def on_lineEdit_26_textChanged(self, p0):
+    @pyqtSlot()
+    def on_lineEdit_26_editingFinished(self):
         """
         Slot documentation goes here.
         
         @param p0 DESCRIPTION
         @type str
         """
-        Visualization.nRL_SigmaSea_Calculeur.Psi = int(p0)
+        Visualization.nRL_SigmaSea_Calculeur.Psi = int(self.lineEdit_26.text())
     
     @pyqtSlot()
     def on_pushButton_8_clicked(self):
@@ -285,7 +281,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.doppler_count += 1
         if self.doppler_count ==14:
             self.doppler_count = 0
-        
+ 
     
     @pyqtSlot()
     def on_radioButton_11_clicked(self):

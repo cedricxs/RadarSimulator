@@ -512,53 +512,181 @@
             <property name="maximumSize">
              <size>
               <width>270</width>
-              <height>160</height>
+              <height>300</height>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">QWidget#widget_20{background-image:url(:/img/5njp9xK6q9.png)}</string>
+             <string notr="true">QWidget#widget_20{background-image:url(:/img/5njp9xK6q95.png)}</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_14">
              <item>
-              <widget class="QLabel" name="label_5">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>16</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>黑体</family>
-                 <pointsize>10</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                 <underline>false</underline>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QLabel#label_5{margin-left:5px;margin-right:5px;color:white}</string>
-               </property>
-               <property name="text">
-                <string>平台信息</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::AutoText</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QWidget" name="widget_16" native="true">
                <property name="styleSheet">
-                <string notr="true">QWidget#widget_16{border: 1px solid gray;margin-left:5px;margin-right:5px;margin-bottom:5px}</string>
+                <string notr="true">QWidget#widget_16{border: 1px solid gray;margin-left:5px;margin-right:5px;margin-bottom:5px;margin-top:5px}</string>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_20">
+                <item>
+                 <widget class="QLabel" name="label_5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>16</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>黑体</family>
+                    <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#label_5{margin-left:5px;margin-right:5px;color:white}</string>
+                  </property>
+                  <property name="text">
+                   <string>平台信息</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::AutoText</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="label_4">
+                    <property name="font">
+                     <font>
+                      <family>黑体</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLabel#label_4{color:white}</string>
+                    </property>
+                    <property name="text">
+                     <string>     时    间</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>70</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>18</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>黑体</family>
+                    <pointsize>8</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton#pushButton_5{border:1px solid gray;border-radius: 5px;color:white; }</string>
+                  </property>
+                  <property name="text">
+                   <string>更多...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="Line" name="line">
+                  <property name="windowModality">
+                   <enum>Qt::NonModal</enum>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>9</pointsize>
+                   </font>
+                  </property>
+                  <property name="autoFillBackground">
+                   <bool>false</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Sunken</enum>
+                  </property>
+                  <property name="lineWidth">
+                   <number>1</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="font">
+                   <font>
+                    <family>黑体</family>
+                    <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#label{margin-left:5px;margin-right:5px;color:white}</string>
+                  </property>
+                  <property name="text">
+                   <string>雷达参数</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_25">
                   <item>
@@ -610,6 +738,74 @@
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_22">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_23">
+                  <item>
+                   <widget class="QLabel" name="label_43">
+                    <property name="font">
+                     <font>
+                      <family>黑体</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLabel#label_43{color:white}</string>
+                    </property>
+                    <property name="text">
+                     <string>    极化方式</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="comboBox">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>17</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>黑体</family>
+                      <pointsize>8</pointsize>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QComboBox#comboBox{color:gray}</string>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>垂直极化</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>水平极化</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_6">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>
                     </property>
@@ -688,71 +884,51 @@
                  </layout>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_23">
-                  <item>
-                   <widget class="QLabel" name="label_43">
-                    <property name="font">
-                     <font>
-                      <family>黑体</family>
-                      <pointsize>10</pointsize>
-                     </font>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QLabel#label_43{color:white}</string>
-                    </property>
-                    <property name="text">
-                     <string>    极化方式</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="comboBox">
-                    <property name="minimumSize">
-                     <size>
-                      <width>80</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>黑体</family>
-                     </font>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QComboBox#comboBox{color:gray}</string>
-                    </property>
-                    <item>
-                     <property name="text">
-                      <string>垂直极化</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>水平极化</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_6">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
+                 <widget class="QPushButton" name="pushButton_4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>18</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>黑体</family>
+                    <pointsize>8</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton#pushButton_4{border:1px solid gray;border-radius: 5px;color:white; }</string>
+                  </property>
+                  <property name="text">
+                   <string>更多...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="Line" name="line_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_2">
+                  <property name="font">
+                   <font>
+                    <family>黑体</family>
+                    <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#label_2{margin-left:5px;margin-right:5px;color:white}</string>
+                  </property>
+                  <property name="text">
+                   <string>海洋环境参数</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_20">
@@ -808,6 +984,77 @@
                   </item>
                  </layout>
                 </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>黑体</family>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLabel#label_3{color:white}</string>
+                    </property>
+                    <property name="text">
+                     <string>    风    向</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit">
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>18</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>黑体</family>
+                    <pointsize>8</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton#pushButton_3{border:1px solid gray;border-radius: 5px;color:white; }</string>
+                  </property>
+                  <property name="text">
+                   <string>更多...</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
@@ -839,7 +1086,7 @@
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_13">
                 <item>
-                 <widget class="QRadioButton" name="radioButton_7">
+                 <widget class="QRadioButton" name="radioButton_9">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -853,57 +1100,10 @@
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_7{color:white}
-</string>
+                   <string notr="true">QRadioButton#radioButton_9{color:white}</string>
                   </property>
                   <property name="text">
-                   <string>二维图</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_8">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_8{color:white}
-</string>
-                  </property>
-                  <property name="text">
-                   <string>三维图</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_11">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">
-QRadioButton#radioButton_11{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>多普勒及对数回波强度图</string>
+                   <string>海浪平面</string>
                   </property>
                  </widget>
                 </item>
@@ -931,7 +1131,7 @@ QRadioButton#radioButton_10{color:white}</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="radioButton_9">
+                 <widget class="QRadioButton" name="radioButton_11">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -945,130 +1145,16 @@ QRadioButton#radioButton_10{color:white}</string>
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_9{color:white}</string>
+                   <string notr="true">
+QRadioButton#radioButton_11{color:white}</string>
                   </property>
                   <property name="text">
-                   <string>海浪平面</string>
+                   <string>多普勒及对数回波强度图</string>
                   </property>
                  </widget>
                 </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget_13" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>270</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>黑体</family>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QWidget#widget_13{background-image:url(:/img/5njp9xK6q9.png)}</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_19">
-             <item>
-              <widget class="QWidget" name="widget_15" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#widget_15{border: 1px solid gray;margin:5px; }</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout">
-                <item row="3" column="0">
-                 <widget class="QRadioButton" name="radioButton_3">
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_3{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>韦布尔分布</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_2">
-                  <property name="minimumSize">
-                   <size>
-                    <width>123</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLabel#label_2{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>形状参数(瑞利方差)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QLineEdit" name="lineEdit">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>21</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>0.6</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QRadioButton" name="radioButton_2">
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_2{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>瑞利分布</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label">
+                <item>
+                 <widget class="QRadioButton" name="radioButton_7">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -1082,61 +1168,11 @@ QRadioButton#radioButton_10{color:white}</string>
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QLabel#label{color:white}</string>
+                   <string notr="true">QRadioButton#radioButton_7{color:white}
+</string>
                   </property>
                   <property name="text">
-                   <string>杂波幅度分布类型</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="label_3">
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLabel#label_3{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>尺度参数</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QLineEdit" name="lineEdit_2">
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>1.5</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radioButton">
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton {color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>对数正太分布</string>
+                   <string>杂波统计分布图</string>
                   </property>
                  </widget>
                 </item>
