@@ -8,7 +8,7 @@ class Dialog_para_radar(QtWidgets.QDialog, Ui_Dialog_para_radar):
         self.sys_info = sys_info
         self.setupUi(self)
         self.init_para()
-        
+        self.setFixedSize( self.width (),self.height ())
     
     def init_para(self):
         self.lineEdit_24.setText(str(self.sys_info.fGHz))

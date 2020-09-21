@@ -42,7 +42,9 @@ class Plot_Widget(FigureCanvasQTAgg):
             y = data[1]
             self.axe.cla()
             self.axe.grid()
+            
             self.axe.plot(x, y, '-', color='orange',  linewidth=0.8)
+            
         else:
             self.axe.plot(data, '-', color='blue', linewidth=0.8)
         self.draw()

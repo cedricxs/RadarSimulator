@@ -7,6 +7,7 @@ class Dialog_para_platform(QtWidgets.QDialog, Ui_Dialog_para_platform):
         self.setupUi(self)
         self.sys_info = sys_info
         self.init_para()
+        self.setFixedSize( self.width (),self.height ())
         
     def init_para(self):
         self.lineEdit_27.setText(str(self.sys_info.timestamp))

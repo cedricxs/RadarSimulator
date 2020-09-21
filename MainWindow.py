@@ -24,22 +24,32 @@ import csv
 class plotThread (threading.Thread):   #继承父类threading.Thread
     def __init__(self, parent):
         threading.Thread.__init__(self)
+        self.count = 0
         self.parent = parent
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
         while self.parent.run == True:
             start = time.time()
-            xdata = np.array(self.parent.plot3d_widget.visualization.nRL_SigmaSea_Calculeur.show_data)
+            self.count = self.count+1
+            xdata = np.array(self.parent.plot3d_widget.visualization.nRL_SigmaSea_Calculeur.sample_data)
             if len(xdata)>0:
-                self.parent.plot_widget1.updateData(xdata)
-                maxdat, mindat = max(xdata), min(xdata)
-                if maxdat != mindat:
-                    xaixs = np.arange(mindat, maxdat+(maxdat-mindat)/10, (maxdat-mindat)/10)
-                    xpdf = np.histogram(xdata, xaixs)[0]
-                    xpdf = np.append(xpdf, [0])
-                    self.parent.plot_widget2.updateData([xaixs, xpdf])
+                if len(xdata)>100:
+                    #最多显示100个点
+                    show_data = xdata[len(xdata)-100:]
+                    time_seq = range(len(xdata)-100, len(xdata))
+                else:
+                    show_data = xdata
+                    time_seq = range(len(xdata))
+                self.parent.plot_widget1.updateData([time_seq, show_data])
+                if self.count%5 == 0:
+                    maxdat, mindat = max(xdata), min(xdata)
+                    if maxdat != mindat:
+                        xaixs = np.arange(mindat, maxdat+(maxdat-mindat)/10, (maxdat-mindat)/10)
+                        xpdf = np.histogram(xdata, xaixs, density=True)[0]
+                        xpdf = np.append(xpdf, [0])
+                        self.parent.plot_widget2.updateData([xaixs, xpdf])
             print(time.time()-start)
             
-            time.sleep(0.5)
+            time.sleep(1)
                 
         
 class MainWindow(QMainWindow, Ui_MainWindow):

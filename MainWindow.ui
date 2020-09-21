@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>C:/Users/97958/.designer/backup/download.png</normaloff>C:/Users/97958/.designer/backup/download.png</iconset>
+    <normaloff>download.png</normaloff>download.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>

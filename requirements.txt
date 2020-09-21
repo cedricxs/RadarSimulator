@@ -1,0 +1,6 @@
+traits==6.0.0
+traitsui==7.0.0
+numpy==1.16.2
+pyface==7.0.0
+Cython==0.29.20
+matplotlib==3.2.1

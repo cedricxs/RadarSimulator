@@ -18,7 +18,6 @@ class NRL_SigmaSea_Calculeur:
         self.sys_info = sys_info
         self.Psi_rad = np.deg2rad(self.sys_info.Psi)
         self.sample_data = []
-        self.show_data = []
         if self.sys_info.pol == 'hh':
             #% These coefficients were optimized for 0 to 60 deg grazing angle
             self.CC1= -73.0
@@ -50,9 +49,6 @@ class NRL_SigmaSea_Calculeur:
         
     def sample(self):
         self.sample_data.append(abs(self.SigZ[int(self.SigZ.shape[0]/2)][int(self.SigZ.shape[1]/2)]))
-        self.show_data = self.sample_data
-        if len(self.sample_data) > 2500:
-            self.show_data = self.sample_data[len(self.sample_data)-2500:]
     def determinerPsi(self):
         c = 3e8
         t = 2e-7
