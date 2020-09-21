@@ -1,10 +1,8 @@
 import numpy as np
 import math
 class Doppler:
-    def __init__(self):
-        self.xpix=250;
-        self.ypix=80;
-        self.nargout=0.2;
+    def __init__(self, sys_info):
+        self.sys_info = sys_info  
         import netCDF4
         self.file = '#310_19931118_162155_stareC0000.cdf';
         self.content = netCDF4.Dataset(self.file)
@@ -14,15 +12,13 @@ class Doppler:
         self.shapes = self.data.shape
         self.nsweep=self.shapes[0];
         self.n = self.shapes[2];
-        self.xavg = max(1,math.ceil(self.nsweep/self.xpix));#ceil朝正无穷大方向取整，max(a,b),如果b小于a，则等于a
+        self.xavg = max(1,math.ceil(self.nsweep/self.sys_info.xpix));#ceil朝正无穷大方向取整，max(a,b),如果b小于a，则等于a
 
         self.scan_range=self.content.variables['range']
 
         #% txpol = 'vv'; % hh, hv, vh, vv
         self.data = np.transpose(self.data, (0, 1, 2, 3))
         self.data = self.data.astype('short') 
-        self.pol = 'vv'; # hh, hv, vh, vv
-        self.mode = 'auto' ;# 'raw' (no pre-processing) 
         #           % 'auto' (automatic pre-processing) 
         #           % '' (pre-processing for dartmouth files containing land)
         #
@@ -37,15 +33,15 @@ class Doppler:
         #% load I and Q data
         #%[I,Q]=ipixcdf(nc,txpol,rangebin);
         from ipixLoader import ipixLoader 
-        [I,Q,meanIQ,stdIQ,inbal] = ipixLoader(self.data,self.pol,rangebin,self.mode);
+        [I,Q,meanIQ,stdIQ,inbal] = ipixLoader(self.data,self.sys_info.pol,rangebin,self.sys_info.mode);
         #R = abs(I + 1j * Q);
         #r = R / max(R);
 
         N=I.shape[0];#%r=size(A,1)该语句返回的时矩阵A的行数， c=size(A,2) 该语句返回的时矩阵A的列数。
         #
         #% adjust fft window and averaging to match image size
-        wdw=max(128,2**math.ceil(np.log(4*N/self.xpix)/np.log(2)));#128
-        yavg=max(1,math.ceil(wdw/self.ypix));#1
+        wdw=max(128,2**math.ceil(np.log(4*N/self.sys_info.xpix)/np.log(2)));#128
+        yavg=max(1,math.ceil(wdw/self.sys_info.ypix));#1
         timeStep=wdw/4;#32
         M=math.floor((N-wdw)/timeStep);# y = floor(x) 函数将x中元素取整，值y为不大于本身的最大整数。
         #%对于复数，分别对实部和虚部取整
@@ -94,7 +90,7 @@ class Doppler:
     
         #
         #% display image
-        if self.nargout<1:
+        if self.sys_info.nargout<1:
           x_time=[(wdw/2+i*timeStep)/PRF for i in range(M)];
           freq=np.array([(i/(wdw/yavg)-0.5)*PRF for i in range(math.floor(wdw/yavg))]);
           doppl=freq*3e8/(2*RF_frequency*1e9); 

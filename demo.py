@@ -4,6 +4,7 @@ import numpy as np
 #z = x*np.exp(-x**2-y**2)
 ## View it.
 from mayavi import mlab
+from mpl_toolkits.mplot3d import Axes3D
 #s = mlab.surf(x, y, z)
 #mlab.show()
 #x, y = np.mgrid[0:3:1,0:3:1]
@@ -37,20 +38,73 @@ from mayavi import mlab
 #                                      np.pi*(i+1)/5.)*0.5)
 #    scalars = np.sin(mu + np.pi*(i+1)/5)
 #    ms.trait_set(x=x, scalars=scalars)
-import numpy as np
-from mayavi import mlab
-@mlab.show
-@mlab.animate(delay = 100, ui = False)
-def updateAnimation():
-    t = 0.0
-    print(1)
-    while True:
-        ball.mlab_source.set(x = np.cos(t), y = np.sin(t), z = 0)
-        
-        t += 0.1
-        yield
+from logReturnRadar import LogReturnRadar
+from mayavi.mlab import  surf
+#@mlab.show
+#@mlab.animate(delay = 100, ui = True)
+#def updateAnimation():
+#    time_count = 0;
+#    while True:
+#        if time_count+10 >= length:
+#            break;
+#        else:
+#            index = [int(i) for i in ((azi[time_count:time_count+10]-azi_min)/azi_ecart)]
+#            for i in range(10):
+#                values = datasrc[time_count+i, 0, :, 0]
+#                data[:, index[i]] = values;
+#        obj.mlab_source.scalars = data;
+#        time_count+=10;
+#        yield
 
-ball = mlab.points3d(np.array(1.), np.array(0.), np.array(0.))
+x = range(0, 77);
+y = range(2649, 2845, 15);
+x, y = np.mgrid[x, y]
+data = [np.zeros((77, 14)) for i in range(8)];
+from System_Infomations import System_Infomations
+logsrc = LogReturnRadar(System_Infomations())
+datasrc = logsrc.data
+azi = logsrc.azi
+azi_min = 170.150757
+azi_ecart = 0.005493
+length = logsrc.nsweep
 
-updateAnimation()
-mlab.show()
+from matplotlib import pyplot as plt
+fig = plt.figure()
+ax = Axes3D(fig)
+time_count = 0;
+
+while True:
+    if time_count >= length:
+        break;
+    else:
+        index = int((azi[time_count]-azi_min)/azi_ecart)
+        for i in range(2):
+            for j in range(4):
+                values = datasrc[time_count, i, :, j]
+                data[i*4+j][index, :] = values;
+    time_count+=1;
+ax.plot_surface(x, y, data[0], rstride=1, cstride=1, cmap='jet')
+ax.set_xlabel('azimuth')
+ax.set_ylabel('range')
+ax.set_zlabel('amplitude')
+#ax1 = fig.add_subplot(421)
+#ax1.pcolormesh(x,y,data[0], cmap='jet')
+#ax2 = fig.add_subplot(422)
+#ax2.pcolormesh(x,y,data[1], cmap='jet')
+#ax3 = fig.add_subplot(423)
+#ax3.pcolormesh(x,y,data[2], cmap='jet')
+#ax4 = fig.add_subplot(424)
+#ax4.pcolormesh(x,y,data[3], cmap='jet')
+#ax5 = fig.add_subplot(425)
+#ax5.pcolormesh(x,y,data[4], cmap='jet')
+#ax6 = fig.add_subplot(426)
+#ax6.pcolormesh(x,y,data[5], cmap='jet')
+#ax7 = fig.add_subplot(427)
+#ax7.pcolormesh(x,y,data[6], cmap='jet')
+#ax8 = fig.add_subplot(428)
+#ax8.pcolormesh(x,y,data[7], cmap='jet')
+plt.show()
+#obj = surf(x, y, data, colormap='blue-red')
+
+#updateAnimation()
+#mlab.show()

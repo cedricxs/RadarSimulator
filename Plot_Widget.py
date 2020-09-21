@@ -2,7 +2,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import mpl_toolkits.mplot3d.axes3d as p3
 #from numpy import *
-from matplotlib.text import Text
+#from matplotlib.text import Text
 class Plot_Widget(FigureCanvasQTAgg):
     def __init__(self, parentWidget):
         self.figure = Figure(dpi=100, facecolor='none')
@@ -11,18 +11,19 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.setParent(parentWidget)
         self.resize(parentWidget.size())
         self.setStyleSheet('FigureCanvasQTAgg{background:rgba(0,0,0,0)}')
-        self.mousemove = self.mpl_connect('motion_notify_event', self.mousemove_handler)
+        #self.mousemove = self.mpl_connect('motion_notify_event', self.mousemove_handler)
         self.clean = True
    
-    def updateData(self, data, axe_title = '', axe_xlabel = '',  axe_ylabel = ''):
-        self.clear()
-        self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')
-        self.axe.add_artist(self.text)
+    def setPara(self, axe_title = '', axe_xlabel = '',  axe_ylabel = ''): 
+        #self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')
+        #self.axe.add_artist(self.text)
         self.axe.set_title(axe_title, fontsize=9, color='white', fontweight='bold')
         self.axe.set_xlabel(axe_xlabel, fontsize='x-small', color='white', fontweight='semibold')
         self.axe.set_ylabel(axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
         self.axe.xaxis.set_tick_params(labelsize=6, colors='white')
         self.axe.yaxis.set_tick_params(labelsize=9, colors='white')
+        self.axe.grid()
+    def updateData(self, data):
         if type(data).__name__=='list':
 #            # u and v are parametric variables.
 #            # u is an array from 0 to 2*pi, with 100 elements
@@ -39,12 +40,11 @@ class Plot_Widget(FigureCanvasQTAgg):
             
             x = data[0]
             y = data[1]
-            self.axe.plot(x, y, '-')
-            for i in range(2, len(data)):
-                self.axe.plot(x, data[i], '--')
+            self.axe.cla()
+            self.axe.grid()
+            self.axe.plot(x, y, '-', color='orange',  linewidth=0.8)
         else:
-            self.axe.plot(data)
-        self.axe.grid()
+            self.axe.plot(data, '-', color='blue', linewidth=0.8)
         self.draw()
         self.clean = False
 

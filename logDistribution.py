@@ -3,26 +3,14 @@ import numpy as np
 from spectrum.burg import pburg
 import matplotlib.pyplot as plt
 class LogDistribution:
-    def __init__(self):
-        self.setSigmav(1.0)
-        self.setMuc(1.5)
-        self.setSigmac(0.6)
-
-        
-    def setSigmav(self, sigmav):
-        self.sigmav = sigmav
-        
-    def setMuc(self, muc):
-        self.muc = muc
-        
-    def setSigmac(self, sigmac):
-        self.sigmac = sigmac
-        
+    def __init__(self, sys_info):
+        self.sys_info = sys_info
+   
     def gererTimeDomineData(self, nb_point):
         self.fr = 1000
         
         lamda0 = 0.05
-        self.sigmaf = 2*self.sigmav/lamda0
+        self.sigmaf = 2*self.sys_info.sigmav/lamda0
         
         d1 = np.random.rand(nb_point)
         d2 = np.random.rand(nb_point)
@@ -81,7 +69,7 @@ class LogDistribution:
 #    ximuc=mean(xxi);
 #    yyi=(xxi-ximuc)/xisigmac;
 
-        yyi = self.sigmac*yyi+np.log(self.muc)
+        yyi = self.sys_info.sigmac*yyi+np.log(self.sys_info.muc)
         self.xdata = np.exp(yyi)
 #        return self.xdata.tolist()
 #    muc=1.5;
@@ -96,7 +84,7 @@ class LogDistribution:
         NN, bin=np.histogram(abs(self.xdata),num);
         self.xpdf1=num*NN/(sum(NN)*(maxdat-mindat));
         self.xaxis1= np.arange(mindat, maxdat-(maxdat-mindat)/num+(maxdat-mindat)/num-0.001, (maxdat-mindat)/num)
-        self.th_val = self.lognpdf(self.xaxis1,np.log(self.muc),self.sigmac);
+        self.th_val = self.lognpdf(self.xaxis1,np.log(self.sys_info.muc),self.sys_info.sigmac);
 #        figure;plot(xaxis1,xpdf1);
 #        hold,plot(xaxis1,th_val,':r');
 #        return [xaxis1, xpdf1, th_val]
