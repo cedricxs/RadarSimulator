@@ -13,9 +13,11 @@ from Dialog_Para_radar import Dialog_para_radar
 from Dialog_Para_env import Dialog_para_env
 from Dialog_para_platform import Dialog_para_platform
 from logDistribution import LogDistribution
+from SeaDataGenertor import SeaData
+from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 from doppler import Doppler
 from logReturnRadar import LogReturnRadar
-from Mayavi_Widget import MayaviQWidget
+from Mayavi_Widget import MayaviQWidget, Visualization
 from System_Infomations import System_Infomations
 import numpy as np
 import threading
@@ -28,9 +30,9 @@ class plotThread (threading.Thread):   #继承父类threading.Thread
         self.parent = parent
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
         while self.parent.run == True:
-            start = time.time()
+            
             self.count = self.count+1
-            xdata = np.array(self.parent.plot3d_widget.visualization.nRL_SigmaSea_Calculeur.sample_data)
+            xdata = np.array(NRL_SigmaSea_Calculeur.getInstance().sample_data)
             if len(xdata)>0:
                 if len(xdata)>100:
                     #最多显示100个点
@@ -39,7 +41,9 @@ class plotThread (threading.Thread):   #继承父类threading.Thread
                 else:
                     show_data = xdata
                     time_seq = range(len(xdata))
+                start = time.time()
                 self.parent.plot_widget1.updateData([time_seq, show_data])
+                print("time plot:"+str(time.time()-start))
                 if self.count%5 == 0:
                     maxdat, mindat = max(xdata), min(xdata)
                     if maxdat != mindat:
@@ -47,9 +51,9 @@ class plotThread (threading.Thread):   #继承父类threading.Thread
                         xpdf = np.histogram(xdata, xaixs, density=True)[0]
                         xpdf = np.append(xpdf, [0])
                         self.parent.plot_widget2.updateData([xaixs, xpdf])
-            print(time.time()-start)
             
-            time.sleep(1)
+            
+            time.sleep(0.8)
                 
         
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -66,6 +70,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
         self.sys_info = System_Infomations()
+        
+        self.seaDataGen = SeaData(self.sys_info)
+        self.nrlDataGen = NRL_SigmaSea_Calculeur(self.sys_info)
+        self.log_normal = LogDistribution(self.sys_info)
+        self.doppler = Doppler(self.sys_info)
+        self.doppler_count = 0
+        self.logReturnRadar = LogReturnRadar(self.sys_info)
+        
         #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setup2DPlotWidget()
         self.setup3DPlotWidget()
@@ -76,13 +88,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plot_widget2.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
         self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
         
-        self.log_normal = LogDistribution(self.sys_info)
-        self.doppler = Doppler(self.sys_info)
-        self.doppler_count = 0
-        self.logReturnRadar = LogReturnRadar(self.sys_info)
         
         self.stackedWidget_2.setCurrentIndex(5)
-        self.plot3d_widget.visualization.plotStatus = 0
+        Visualization.plotStatus = 0
         self.plot3d_widget.visualization.plot_static()
         self.plot3d_widget.updateSize()
         self.radioButton_9.setChecked(True)
@@ -123,7 +131,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plot3d_widget = MayaviQWidget(self.sys_info, self.widget_19)
         
     def plot3D(self):
-        self.animation = self.plot3d_widget.visualization.animation()
+        self.animation = Visualization.animation()
     def update(self):
         if self.stackedWidget_2.currentIndex() ==  0:
             self.log_normal.updateData()
@@ -136,6 +144,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def plotRealtime(self):
         self.run = True
+        #self.plot_widget1.start_animation()
         self.plotThread = plotThread(self)
         self.plotThread.start()
     
@@ -148,7 +157,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lineEdit_26.setText(str(self.sys_info.Psi_raw))
         if self.sys_info.fengji_changed == True:
             self.lineEdit_11.setText(str(self.sys_info.fengji))
-            self.plot3d_widget.visualization.seaData.update_para()
+            self.seaDataGen.update_para()
             self.sys_info.fengji_changed = False
         self.lineEdit_2.setText(str(self.sys_info.timestamp))
     
@@ -216,7 +225,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.stackedWidget_2.setCurrentIndex(5)
-        self.plot3d_widget.visualization.plotStatus = 0
+        Visualization.plotStatus = 0
         self.plot3d_widget.visualization.plot_static()
         self.plot3d_widget.updateSize()
     
@@ -226,7 +235,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.stackedWidget_2.setCurrentIndex(5)
-        self.plot3d_widget.visualization.plotStatus = 1
+        Visualization.plotStatus = 1
         self.plot3d_widget.visualization.plot_static()
         self.plot3d_widget.updateSize()
     

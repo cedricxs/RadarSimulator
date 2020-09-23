@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project rardar_ocean -->
-<!-- Saved: 2020-08-21, 23:21:02 -->
+<!-- Saved: 2020-09-22, 07:53:41 -->
 <!-- Copyright (C) 2020 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -13,12 +13,19 @@
   <Email></Email>
   <Eol index="0"/>
   <Sources>
+    <Source>Dialog_Para_env.py</Source>
+    <Source>Dialog_Para_radar.py</Source>
+    <Source>Dialog_para_platform.py</Source>
     <Source>MainWindow.py</Source>
     <Source>Mayavi_Widget.py</Source>
     <Source>NRL_SigmaSea.py</Source>
     <Source>Plot_Widget.py</Source>
     <Source>SeaDataGenertor.py</Source>
+    <Source>System_Infomations.py</Source>
     <Source>Ui_MainWindow.py</Source>
+    <Source>Ui_dialog_para_env.py</Source>
+    <Source>Ui_dialog_para_platform.py</Source>
+    <Source>Ui_dialog_para_radar.py</Source>
     <Source>__init__.py</Source>
     <Source>demo.py</Source>
     <Source>doppler.py</Source>
@@ -30,6 +37,9 @@
   </Sources>
   <Forms>
     <Form>MainWindow.ui</Form>
+    <Form>dialog_para_env.ui</Form>
+    <Form>dialog_para_platform.ui</Form>
+    <Form>dialog_para_radar.ui</Form>
   </Forms>
   <Resources>
     <Resource>img.qrc</Resource>

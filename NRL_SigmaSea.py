@@ -1,6 +1,11 @@
 import numpy as np
 class NRL_SigmaSea_Calculeur:
+    __instance = None
+    def getInstance():
+        if NRL_SigmaSea_Calculeur.__instance is not None:
+            return NRL_SigmaSea_Calculeur.__instance
     def __init__(self,sys_info):
+        NRL_SigmaSea_Calculeur.__instance = self
         #% Vilhelm Gregers-Hansen, Naval Research Laboratory
         #% 5 May 2010
         #% SigmaSea computes reflectivity coefficient for sea clutter in dB

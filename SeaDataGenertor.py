@@ -1,6 +1,11 @@
 import numpy as np
 class SeaData:
+    __instance = None
+    def getInstance():
+        if SeaData.__instance is not None:
+            return SeaData.__instance
     def __init__(self, sys_info):
+        SeaData.__instance = self
         self.sys_info = sys_info
         self.fengji = sys_info.fengji
         self.pinpushu=4;

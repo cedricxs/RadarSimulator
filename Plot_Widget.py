@@ -1,6 +1,7 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import mpl_toolkits.mplot3d.axes3d as p3
+from matplotlib.animation import FuncAnimation
 #from numpy import *
 #from matplotlib.text import Text
 class Plot_Widget(FigureCanvasQTAgg):
@@ -14,6 +15,14 @@ class Plot_Widget(FigureCanvasQTAgg):
         #self.mousemove = self.mpl_connect('motion_notify_event', self.mousemove_handler)
         self.clean = True
    
+    def update_animation(self, frame):
+        print(frame)
+        x = range(frame)
+        y = [i**2 for i in x]
+        self.line[0].set_data(x, y)
+        return self.line
+    def start_animation(self):
+        FuncAnimation(self.figure, self.update_animation, frames=range(100),init_func=None,interval=800, repeat = False,blit=True)
     def setPara(self, axe_title = '', axe_xlabel = '',  axe_ylabel = ''): 
         #self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')
         #self.axe.add_artist(self.text)
@@ -23,6 +32,7 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.axe.xaxis.set_tick_params(labelsize=6, colors='white')
         self.axe.yaxis.set_tick_params(labelsize=9, colors='white')
         self.axe.grid()
+        self.line  = self.axe.plot([], [], '-', color='orange',  linewidth=0.8)
     def updateData(self, data):
         if type(data).__name__=='list':
 #            # u and v are parametric variables.
@@ -42,7 +52,6 @@ class Plot_Widget(FigureCanvasQTAgg):
             y = data[1]
             self.axe.cla()
             self.axe.grid()
-            
             self.axe.plot(x, y, '-', color='orange',  linewidth=0.8)
             
         else:
