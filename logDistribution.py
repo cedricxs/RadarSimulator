@@ -71,6 +71,7 @@ class LogDistribution:
 
         yyi = self.sys_info.sigmac*yyi+np.log(self.sys_info.muc)
         self.xdata = np.exp(yyi)
+        self.xaxis = range(1, nb_point+1)
 #        return self.xdata.tolist()
 #    muc=1.5;
 #    sigmac=0.6;

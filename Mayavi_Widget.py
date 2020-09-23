@@ -39,7 +39,7 @@ class Visualization(HasTraits):
             nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(Visualization.z)
             Visualization.obj = surf(Visualization.x, Visualization.y,nrl, colormap='blue-red') 
      
-    @mlab.animate(delay=40, ui=False)
+    @mlab.animate(delay=100, ui=False)
     def animation():
         while True:
             [Visualization.x, Visualization.y , Visualization.z] = SeaData.getInstance().getSeaData()

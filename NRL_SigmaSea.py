@@ -45,7 +45,7 @@ class NRL_SigmaSea_Calculeur:
         import time
         start = time.time()
         self.determinerSS()
-        if type(self.sys_info.Psi).__name__ == 'int':
+        if type(self.sys_info.Psi).__name__ == 'float':
             self.determinerPsi()
         self.SigZ = self.CC1 + self.CC2*np.log10(np.sin(self.Psi_rad)) + (27.5+self.CC3*self.sys_info.Psi)*np.log10(self.sys_info.fGHz)/ (1.+0.95*self.sys_info.Psi) + self.CC4*(self.SS+1)**(1.0 /(2+0.085*self.sys_info.Psi+0.033*self.SS))+self.CC5*self.sys_info.Psi**2;
         self.sample()

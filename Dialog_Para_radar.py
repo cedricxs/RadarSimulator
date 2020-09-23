@@ -22,12 +22,12 @@ class Dialog_para_radar(QtWidgets.QDialog, Ui_Dialog_para_radar):
         """
         Slot documentation goes here.
         """
-        self.sys_info.fGHz = int(self.lineEdit_24.text())
+        self.sys_info.fGHz = float(self.lineEdit_24.text())
         index = self.comboBox.currentIndex()
         if  index == 0: 
             self.sys_info.pol = 'vv'
         else:
             self.sys_info.pol = 'hh'
-        self.sys_info.Psi = int(self.lineEdit_25.text())
-        self.sys_info.Psi_raw = int(self.lineEdit_25.text())
+        self.sys_info.Psi = float(self.lineEdit_25.text())
+        self.sys_info.Psi_raw = float(self.lineEdit_25.text())
         self.parent().update_para()

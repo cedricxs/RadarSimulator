@@ -67,10 +67,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         @param parent reference to the parent widget
         @type QWidget
         """
+        #################### setUp All QtDesigner widgets########################
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
+        #################### setUp system inforamtion########################
         self.sys_info = System_Infomations()
         
+        #################### setUp data genertors########################
         self.seaDataGen = SeaData(self.sys_info)
         self.nrlDataGen = NRL_SigmaSea_Calculeur(self.sys_info)
         self.log_normal = LogDistribution(self.sys_info)
@@ -78,49 +81,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.doppler_count = 0
         self.logReturnRadar = LogReturnRadar(self.sys_info)
         
+        #################### setUp All Plot widgets ########################
         #self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setup2DPlotWidget()
-        self.setup3DPlotWidget()
-        self.setupDopplerWidget()
-        self.setupLogReturnRadarWidget()
+        self.setupAllPlotWidget()
         
         self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
         self.plot_widget2.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
         self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
+        self.plot_widget4.setPara('real time sea clutter', 'Time', 'Amplitude')
+        self.plot_widget5.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
+        self.plot_widget6.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
         
-        
+        #################### Init default Index########################
         self.stackedWidget_2.setCurrentIndex(5)
         Visualization.plotStatus = 0
         self.plot3d_widget.visualization.plot_static()
         self.plot3d_widget.updateSize()
         self.radioButton_9.setChecked(True)
+        
+        #################### Init All information labels########################
         self.update_para()
         self.dialog_para_radar = Dialog_para_radar(self.sys_info, self)
         self.dialog_para_env = Dialog_para_env(self.sys_info, self)
         self.dialog_para_platform = Dialog_para_platform(self.sys_info, self)
         self.action_7.setEnabled(False)
     
-    def setup2DPlotWidget(self):
+    def setupAllPlotWidget(self):
         
-        ####################### log分布 #####################
+        ####################### RealTime 海杂波数据 Index 0#####################
         self.plot_widget1 = Plot_Widget(self.widget_5)
-        self.plot_widget2 = Plot_Widget(self.widget_1)
-        self.plot_widget3 = Plot_Widget(self.widget)
+        self.plot_widget2 = Plot_Widget(self.widget)
+        self.plot_widget3 = Plot_Widget(self.widget_1)
         
-        ####################### 瑞利分布 #####################
-        self.plot_widget4 = Plot_Widget(self.widget_6)
-        self.plot_widget5 = Plot_Widget(self.widget_2)
-        self.plot_widget6 = Plot_Widget(self.widget_4)
+        ####################### 幅度统计分布模型log分布 Index 1#####################
+        self.plot_widget4 = Plot_Widget(self.widget_4)
+        self.plot_widget5 = Plot_Widget(self.widget_6)
+        self.plot_widget6 = Plot_Widget(self.widget_2)
 
-        ####################### k分布 #####################
+        ####################### 空 Index 2#####################
         self.plot_widget7 = Plot_Widget(self.widget_7)
         self.plot_widget8 = Plot_Widget(self.widget_8)
         self.plot_widget9 = Plot_Widget(self.widget_9)
 
-        ####################### 韦伯尔分布 #####################
+        ####################### 空 Index 3#####################
         self.plot_widget10 = Plot_Widget(self.widget_10)
         self.plot_widget11 = Plot_Widget(self.widget_11)
         self.plot_widget12 = Plot_Widget(self.widget_12)
+        
+        ####################### 多普勒和对数回波强度 Index 4#####################
+        self.setupDopplerWidget()
+        self.setupLogReturnRadarWidget()
+        
+        ####################### 海平面和后向散射系数三维图 Index 5#####################
+        self.setup3DPlotWidget()
         
     def setupDopplerWidget(self):
         self.doppler_plot_widget = Plot_Widget(self.widget_24)
@@ -132,15 +145,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
     def plot3D(self):
         self.animation = Visualization.animation()
-    def update(self):
-        if self.stackedWidget_2.currentIndex() ==  0:
-            self.log_normal.updateData()
-            xaxis1, xpdf1, th_val = self.log_normal.xaxis1, self.log_normal.xpdf1, self.log_normal.th_val
-            fre, psd, powerf = self.log_normal.freqx, self.log_normal.psd_dat, self.log_normal.powerf
-            self.plot_widget2.updateData([xaxis1, xpdf1, th_val])
-            self.plot_widget3.updateData([fre, psd, powerf])   
-        else:
-            pass
+    def update_AmStDisModel(self):
+        self.stackedWidget_2.setCurrentIndex(1)
+        self.plot_widget4.resize(self.plot_widget4.parent().size())
+        self.plot_widget5.resize(self.plot_widget5.parent().size())
+        self.plot_widget6.resize(self.plot_widget6.parent().size())
+        self.log_normal.updateData()
+        xaxis, xdata = self.log_normal.xaxis, self.log_normal.xdata
+        xaxis1, xpdf1, th_val = self.log_normal.xaxis1, self.log_normal.xpdf1, self.log_normal.th_val
+        fre, psd, powerf = self.log_normal.freqx, self.log_normal.psd_dat, self.log_normal.powerf
+        self.plot_widget4.updateData([xaxis, xdata])
+        self.plot_widget5.updateData([xaxis1, xpdf1, th_val])
+        self.plot_widget6.updateData([fre, psd, powerf])   
     
     def plotRealtime(self):
         self.run = True
@@ -166,7 +182,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        self.update()
+        self.update_AmStDisModel()
         
 
     def resizeEvent(self, event):
@@ -342,4 +358,4 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             csv_write.writerow(csv_head_name)
             csv_head_value = self.sys_info.valuelist()
             csv_write.writerow(csv_head_value)
-            csv_write.writerows([[value] for value in self.plot3d_widget.visualization.nRL_SigmaSea_Calculeur.sample_data])
+            csv_write.writerows([[value] for value in self.nrlDataGen.sample_data])

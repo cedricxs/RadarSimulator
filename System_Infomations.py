@@ -11,9 +11,9 @@ class System_Infomations():
         self.pol = 'vv' 
         self.mode = 'auto'  
         #NRL
-        self.fGHz = 8
-        self.Psi = 30
-        self.Psi_raw = 30
+        self.fGHz = 8.0
+        self.Psi = 30.0
+        self.Psi_raw = 30.0
         self.ThWind = 0
         #seadata
         self.fengji = 8
