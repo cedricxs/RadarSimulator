@@ -26,13 +26,22 @@ class Plot_Widget(FigureCanvasQTAgg):
     def setPara(self, axe_title = '', axe_xlabel = '',  axe_ylabel = ''): 
         #self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')
         #self.axe.add_artist(self.text)
+        self.axe_title = axe_title
+        self.axe_xlabel = axe_xlabel
+        self.axe_ylabel = axe_ylabel
         self.axe.set_title(axe_title, fontsize=9, color='white', fontweight='bold')
         self.axe.set_xlabel(axe_xlabel, fontsize='x-small', color='white', fontweight='semibold')
         self.axe.set_ylabel(axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
         self.axe.xaxis.set_tick_params(labelsize=6, colors='white')
         self.axe.yaxis.set_tick_params(labelsize=9, colors='white')
         self.axe.grid()
-        self.line  = self.axe.plot([], [], '-', color='orange',  linewidth=0.8)
+        #self.lines  = self.axe.plot([], [], '-', color='orange',  linewidth=0.8)
+    
+    def resetAxisInfo(self):
+        self.axe.set_title(self.axe_title, fontsize=9, color='white', fontweight='bold')
+        self.axe.set_xlabel(self.axe_xlabel, fontsize='x-small', color='white', fontweight='semibold')
+        self.axe.set_ylabel(self.axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
+        self.axe.grid()
     def updateData(self, data):
         if type(data).__name__=='list':
 #            # u and v are parametric variables.
@@ -51,13 +60,13 @@ class Plot_Widget(FigureCanvasQTAgg):
             x = data[0]
             y = data[1]
             self.axe.cla()
-            self.axe.grid()
+            self.resetAxisInfo()
             self.axe.plot(x, y, '-', color='orange',  linewidth=1)
             if len(data) == 3:
                 y_th = data[2]
                 self.axe.plot(x, y_th, '--', color='blue',  linewidth=1)
         else:
-            self.axe.plot(data, '-', color='blue', linewidth=0.8)
+            self.lines = self.axe.plot(data, '-', color='blue', linewidth=1)
         self.draw()
         self.clean = False
 
