@@ -61,15 +61,26 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.draw()
         self.clean = False
 
-    def draw_doppler(self, x, y, z, rangebin):
-        self.clear()
-        self.axe.set_title('time doppler - range{}'.format(rangebin+1), color='white', fontweight='bold');
-        self.axe.set_xlabel('time(s)', color='white', fontweight='semibold');
-        self.axe.set_ylabel('doppler(m/s)', color='white', fontweight='semibold');
-        self.axe.xaxis.set_tick_params( colors='white')
-        self.axe.yaxis.set_tick_params(  colors='white')
-        self.axe.pcolormesh(x, y, z, cmap='jet')
+    def draw_doppler(self, x, y):
+        self.axe.cla()
+        #self.axe.set_title('time doppler - range{}'.format(rangebin+1), color='white', fontweight='bold');
+        self.axe.set_title('time doppler', color='white', fontweight='semibold');
+        #self.axe.set_xlabel('time(s)', color='white', fontweight='semibold');
+        #self.axe.set_ylabel('doppler(m/s)', color='white', fontweight='semibold');
+        #self.axe.xaxis.set_tick_params( colors='white')
+        #self.axe.yaxis.set_tick_params(  colors='white')
+        #self.axe.pcolormesh(x, y, z, cmap='jet')
+        self.axe.plot(x, y, color='red')
         self.draw()
+        self.clean = False
+    
+    def setDopperResultXY(self, x, y):
+        self.dopplerResultX, self.dopplerResultY = x, y
+    def draw_dopplerResult(self, z):
+        self.axe.cla()
+        self.axe.pcolormesh(self.dopplerResultX, self.dopplerResultY, z)
+        self.draw()
+        self.clean = False
     
     def draw_logReturnRadar(self, x, y, z):
         self.clear()

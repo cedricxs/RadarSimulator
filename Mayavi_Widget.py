@@ -1,10 +1,9 @@
 import os
 from mayavi import mlab
-from mayavi.mlab import mesh, surf, contour_surf
+from mayavi.mlab import surf #contour_surf, mesh
 
 os.environ['ETS_TOOLKIT'] = 'qt4'
 from pyface.qt import QtGui
-from PyQt5.QtCore import Qt 
 from traits.api import HasTraits, Instance, on_trait_change
 from traitsui.api import View, Item
 from mayavi.core.ui.api import MayaviScene, MlabSceneModel, SceneEditor

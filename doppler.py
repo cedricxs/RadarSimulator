@@ -1,7 +1,13 @@
 import numpy as np
 import math
 class Doppler:
+    __instance = None
+    def getInstance():
+        if Doppler.__instance is not None:
+            return Doppler.__instance
+            
     def __init__(self, sys_info):
+        Doppler.__instance = self
         self.sys_info = sys_info  
         import netCDF4
         self.file = '#310_19931118_162155_stareC0000.cdf';
@@ -78,7 +84,6 @@ class Doppler:
         [mn,indx]=np.sort(mn), np.argsort(mn);#升序排列，矩阵大小不变，indx为元素原位置
         noise=TD[indx[0:1],:];
         noiseFloor=np.median(noise[:]);#按每列返回一个值,为该列从大到小排列的中间值
-        print(noiseFloor)
         TD_small_noiseFloor = TD<noiseFloor
         TD[TD_small_noiseFloor] = noiseFloor
         logTD=np.log(TD);
@@ -97,8 +102,11 @@ class Doppler:
           doppl = doppl.tolist()
           self.xx, self.yy = np.meshgrid(x_time,doppl)
         
+        #return [self.xx, self.yy, self.logTD]
+        
+    def getData(self):
         return [self.xx, self.yy, self.logTD]
-
+            
 if __name__ == '__main__':    
     from matplotlib import pyplot as plt
     fig = plt.figure()
