@@ -51,13 +51,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #################### setUp All Plot widgets ########################
         #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setupAllPlotWidget()
-        
-        self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
-        self.plot_widget2.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
-        self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
-        self.plot_widget4.setPara('real time sea clutter', 'Time', 'Amplitude')
-        self.plot_widget5.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
-        self.plot_widget6.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
+    
         
         #################### Init default Index########################
         self.stackedWidget_2.setCurrentIndex(5)
@@ -80,11 +74,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plot_widget2 = Plot_Widget(self.widget)
         self.plot_widget3 = Plot_Widget(self.widget_1)
         
+        self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
+        self.plot_widget2.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
+        self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
+
         ####################### 幅度统计分布模型log分布 Index 1#####################
         self.plot_widget4 = Plot_Widget(self.widget_4)
         self.plot_widget5 = Plot_Widget(self.widget_6)
         self.plot_widget6 = Plot_Widget(self.widget_2)
 
+        self.plot_widget4.setPara('real time sea clutter', 'Time', 'Amplitude')
+        self.plot_widget5.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
+        self.plot_widget6.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
         ####################### 空 Index 2#####################
         self.plot_widget7 = Plot_Widget(self.widget_7)
         self.plot_widget8 = Plot_Widget(self.widget_8)
@@ -104,9 +105,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
     def setupDopplerWidget(self):
         self.doppler_plot_widget = Plot_Widget(self.widget_24)
+        self.doppler_plot_widget.set_facecolor('black')
+        self.doppler_plot_widget.setPara('time doppler','m/s', 'Amplitude')
     def setupLogReturnRadarWidget(self):
         self.logReturnRadar_plot_widget = Plot_Widget(self.widget_21)
         self.dopplerRes_widget = self.logReturnRadar_plot_widget
+        self.dopplerRes_widget.set_facecolor('black')
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
         self.plot3d_widget = MayaviQWidget(self.sys_info, self.widget_19)

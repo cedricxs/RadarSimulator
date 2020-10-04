@@ -1,12 +1,12 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import mpl_toolkits.mplot3d.axes3d as p3
-from matplotlib.animation import FuncAnimation
+#from matplotlib.animation import FuncAnimation
 #from numpy import *
 #from matplotlib.text import Text
 class Plot_Widget(FigureCanvasQTAgg):
     def __init__(self, parentWidget):
-        self.figure = Figure(dpi=100, facecolor='none')
+        self.figure = Figure(facecolor='none')
         self.axe = self.figure.add_subplot(111)
         super().__init__(self.figure)
         self.setParent(parentWidget)
@@ -15,14 +15,16 @@ class Plot_Widget(FigureCanvasQTAgg):
         #self.mousemove = self.mpl_connect('motion_notify_event', self.mousemove_handler)
         self.clean = True
    
-    def update_animation(self, frame):
-        print(frame)
-        x = range(frame)
-        y = [i**2 for i in x]
-        self.line[0].set_data(x, y)
-        return self.line
-    def start_animation(self):
-        FuncAnimation(self.figure, self.update_animation, frames=range(100),init_func=None,interval=800, repeat = False,blit=True)
+    def set_facecolor(self, facecolor):
+       self.axe.set_facecolor(facecolor) 
+#    def update_animation(self, frame):
+#        print(frame)
+#        x = range(frame)
+#        y = [i**2 for i in x]
+#        self.line[0].set_data(x, y)
+#        return self.line
+#    def start_animation(self):
+#        FuncAnimation(self.figure, self.update_animation, frames=range(100),init_func=None,interval=800, repeat = False,blit=True)
     def setPara(self, axe_title = '', axe_xlabel = '',  axe_ylabel = ''): 
         #self.text = Text(0, 0, '', fontsize=6, fontfamily='黑体')
         #self.axe.add_artist(self.text)
@@ -34,14 +36,14 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.axe.set_ylabel(axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
         self.axe.xaxis.set_tick_params(labelsize=6, colors='white')
         self.axe.yaxis.set_tick_params(labelsize=9, colors='white')
-        self.axe.grid()
+        #self.axe.grid()
         #self.lines  = self.axe.plot([], [], '-', color='orange',  linewidth=0.8)
     
     def resetAxisInfo(self):
         self.axe.set_title(self.axe_title, fontsize=9, color='white', fontweight='bold')
         self.axe.set_xlabel(self.axe_xlabel, fontsize='x-small', color='white', fontweight='semibold')
         self.axe.set_ylabel(self.axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
-        self.axe.grid()
+        #self.axe.grid()
     def updateData(self, data):
         if type(data).__name__=='list':
 #            # u and v are parametric variables.
@@ -76,10 +78,8 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.axe.set_title('time doppler', color='white', fontweight='semibold');
         #self.axe.set_xlabel('time(s)', color='white', fontweight='semibold');
         #self.axe.set_ylabel('doppler(m/s)', color='white', fontweight='semibold');
-        #self.axe.xaxis.set_tick_params( colors='white')
-        #self.axe.yaxis.set_tick_params(  colors='white')
         #self.axe.pcolormesh(x, y, z, cmap='jet')
-        self.axe.plot(x, y, color='red')
+        self.axe.plot(x, y, color='red', linewidth='0.7')
         self.draw()
         self.clean = False
     
@@ -87,7 +87,7 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.dopplerResultX, self.dopplerResultY = x, y
     def draw_dopplerResult(self, z):
         self.axe.cla()
-        self.axe.pcolormesh(self.dopplerResultX, self.dopplerResultY, z)
+        self.axe.pcolormesh(self.dopplerResultX, self.dopplerResultY, z, cmap='cubehelix')
         self.draw()
         self.clean = False
     
@@ -111,7 +111,7 @@ class Plot_Widget(FigureCanvasQTAgg):
     def clear(self):
         self.axe.clear()
         self.clean = True
-
+        
 class Plot_Widget3D_Matplt(Plot_Widget):
     def __init__(self, parentWidget):
         super().__init__(parentWidget)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project rardar_ocean -->
-<!-- Saved: 2020-09-22, 07:53:41 -->
+<!-- Saved: 2020-10-04, 07:41:09 -->
 <!-- Copyright (C) 2020 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -19,6 +19,7 @@
     <Source>MainWindow.py</Source>
     <Source>Mayavi_Widget.py</Source>
     <Source>NRL_SigmaSea.py</Source>
+    <Source>PlotThread.py</Source>
     <Source>Plot_Widget.py</Source>
     <Source>SeaDataGenertor.py</Source>
     <Source>System_Infomations.py</Source>

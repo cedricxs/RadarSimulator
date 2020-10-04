@@ -49,9 +49,10 @@ class plotDopplerThread (threading.Thread):   #继承父类threading.Thread
          #while self.parent.run == True:
             for i in range(self.y.shape[1]):
                 start = time.time()
+                self.doppler[:, i] = [v if v>10 else 0 for v in self.doppler[:, i]]
                 self.parent.doppler_plot_widget.draw_doppler(self.y[:, i], self.doppler[:, i])
                 self.z_result = self.z_result[1:, :]
                 self.z_result  = np.append(self.z_result, [self.doppler[:, i]], axis=0)
                 self.parent.dopplerRes_widget.draw_dopplerResult(self.z_result)
                 print("time plot doppler:"+str(time.time()-start))
-                time.sleep(0.3)
+                time.sleep(0.1)
