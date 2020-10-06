@@ -22,12 +22,12 @@ class Visualization(HasTraits):
     ## PLot to Show        
         [Visualization.x, Visualization.y , Visualization.z] = SeaData.getInstance().getSeaData()
         f = mlab.gcf()
-        
         f.scene.render_window.point_smoothing = True
         f.scene.render_window.line_smoothing = True
         f.scene.render_window.polygon_smoothing = True
         f.scene.render_window.multi_samples = 8 # Try with 4 if you think this is slow
         f.scene.anti_aliasing_frames = True
+        f.scene.background = (0, 0, 0)
         mlab.draw()
         
     def plot_static(self):
