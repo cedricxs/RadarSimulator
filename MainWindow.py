@@ -172,7 +172,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.stackedWidget_2.currentIndex() ==  0:
            self.plot_widget1.resize(self.plot_widget1.parent().size())
            self.plot_widget2.resize(self.plot_widget2.parent().size())
-           self.plot_widget3.resize(self.plot_widget3.parent().size())
+           #self.plot_widget3.resize(self.plot_widget3.parent().size())
         elif self.stackedWidget_2.currentIndex() ==  1:
            self.plot_widget4.resize(self.plot_widget4.parent().size())
            self.plot_widget5.resize(self.plot_widget5.parent().size())
