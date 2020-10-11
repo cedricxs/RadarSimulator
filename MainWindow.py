@@ -189,32 +189,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
         elif self.stackedWidget_2.currentIndex() ==  5:
             self.plot3d_widget.updateSize()
-    def lancer():
-        import sys
-        app = QtWidgets.QApplication(sys.argv)
-        mainWindow = MainWindow()
-        mainWindow.show()
-        #mainWindow.resize(880, 600)
-        sys.exit(app.exec_())
 
-    
-    @pyqtSlot()
-    def on_pushButton_8_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        #x, y, z = self.doppler.calcul(self.doppler_count)
-        #self.doppler_plot_widget.draw_doppler(x, y, z, self.doppler_count)
-#        if self.doppler_count == 0:
-#            x, y, z = self.logReturnRadar.calcul()
-#            self.logReturnRadar_plot_widget.draw_logReturnRadar(x, y, z)
-#        self.doppler_count += 1
-#        if self.doppler_count ==14:
-#            self.doppler_count = 0
-        self.plotDopplerRealTime()
-
-
-    
     @pyqtSlot()
     def on_action_triggered(self):
         """
@@ -328,3 +303,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.stackedWidget_2.setCurrentIndex(4)
         self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
         self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
+        self.plotDopplerRealTime()
+        
+    def lancer():
+        import sys
+        app = QtWidgets.QApplication(sys.argv)
+        mainWindow = MainWindow()
+        mainWindow.show()
+        #mainWindow.resize(880, 600)
+        sys.exit(app.exec_())
+        
