@@ -19,7 +19,7 @@ class Dialog_para_platform(QtWidgets.QDialog, Ui_Dialog_para_platform):
         """
         Slot documentation goes here.
         """
-        self.sys_info.timestamp = int(self.lineEdit_27.text())
+        self.sys_info.timestamp.value = int(self.lineEdit_27.text())
         self.sys_info.jing = int(self.lineEdit_24.text())
         self.sys_info.wei = int(self.lineEdit_26.text())
         self.sys_info.height = int(self.lineEdit_25.text())

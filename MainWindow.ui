@@ -75,6 +75,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>670</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
            <width>530</width>
@@ -85,7 +91,7 @@
           <string notr="true"/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page_5">
           <property name="sizePolicy">
@@ -111,7 +117,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>500</width>
+               <width>9999</width>
                <height>16777215</height>
               </size>
              </property>
@@ -136,7 +142,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>500</width>
+               <width>9999</width>
                <height>16777215</height>
               </size>
              </property>
@@ -147,31 +153,6 @@
              </property>
              <property name="styleSheet">
               <string notr="true">QWidget#widget {border: 1px solid gray;}</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QWidget" name="widget_1" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>500</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QWidget#widget_1{border: 1px solid gray}</string>
              </property>
             </widget>
            </item>
@@ -407,7 +388,7 @@
               <widget class="QWidget" name="widget_24" native="true">
                <property name="maximumSize">
                 <size>
-                 <width>510</width>
+                 <width>9999</width>
                  <height>250</height>
                 </size>
                </property>
@@ -417,7 +398,7 @@
               <widget class="QWidget" name="widget_21" native="true">
                <property name="maximumSize">
                 <size>
-                 <width>510</width>
+                 <width>9999</width>
                  <height>250</height>
                 </size>
                </property>
@@ -453,7 +434,7 @@
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>530</width>
+                 <width>9999</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -1085,208 +1066,6 @@
             </layout>
            </widget>
           </item>
-          <item>
-           <widget class="QWidget" name="widget_18" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>270</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QWidget#widget_18{background-image:url(:/img/5njp9xK6q9.png)}</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QWidget" name="widget_14" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#widget_14{border: 1px solid gray;margin:5px; }</string>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_13">
-                <item>
-                 <widget class="QRadioButton" name="radioButton_9">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_9{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>海浪平面</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_10">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">
-QRadioButton#radioButton_10{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>后向散射系数</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_7">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QRadioButton#radioButton_7{color:white}
-</string>
-                  </property>
-                  <property name="text">
-                   <string>杂波统计分布图</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_11">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>黑体</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">
-QRadioButton#radioButton_11{color:white}</string>
-                  </property>
-                  <property name="text">
-                   <string>多普勒及对数回波强度图</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="widget_25" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>150</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>黑体</family>
-          </font>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
-          <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>102</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>黑体</family>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton#pushButton{border:2px solid gray;border-radius: 10px;color:white; }</string>
-            </property>
-            <property name="text">
-             <string>幅度统计
-分布模型</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_8">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>黑体</family>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton#pushButton_8{border:2px solid gray;border-radius: 10px;color:white;}</string>
-            </property>
-            <property name="text">
-             <string>多普勒图及
-回波强度图</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -1328,9 +1107,22 @@ QRadioButton#radioButton_11{color:white}</string>
     </property>
     <addaction name="action_6"/>
    </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>视图</string>
+    </property>
+    <addaction name="action_4"/>
+    <addaction name="separator"/>
+    <addaction name="action_9"/>
+    <addaction name="separator"/>
+    <addaction name="action_11"/>
+    <addaction name="separator"/>
+    <addaction name="action_13"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
   </widget>
   <action name="action">
    <property name="text">
@@ -1363,6 +1155,26 @@ QRadioButton#radioButton_11{color:white}</string>
   <action name="action_7">
    <property name="text">
     <string>停止</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>海浪平面</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>后向散射系数</string>
+   </property>
+  </action>
+  <action name="action_11">
+   <property name="text">
+    <string>杂波统计分布图</string>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="text">
+    <string>多普勒及对数回波强度图</string>
    </property>
   </action>
  </widget>

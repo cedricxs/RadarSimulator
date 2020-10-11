@@ -28,6 +28,7 @@ class Visualization(HasTraits):
         f.scene.render_window.multi_samples = 8 # Try with 4 if you think this is slow
         f.scene.anti_aliasing_frames = True
         f.scene.background = (0, 0, 0)
+        mlab.axes(x_axis_visibility=True, y_axis_visibility=True, z_axis_visibility=True)
         mlab.draw()
         
     def plot_static(self):

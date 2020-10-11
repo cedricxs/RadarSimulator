@@ -1,6 +1,7 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import mpl_toolkits.mplot3d.axes3d as p3
+from FitModel import DistributionModel
 #from matplotlib.animation import FuncAnimation
 #from numpy import *
 #from matplotlib.text import Text
@@ -61,12 +62,20 @@ class Plot_Widget(FigureCanvasQTAgg):
             
             x = data[0]
             y = data[1]
+            if(len(x)!=len(y)):
+                min_len = min(len(x), len(y))
+                x, y = x[:min_len], y[:min_len]
             self.axe.cla()
             self.resetAxisInfo()
-            self.axe.plot(x, y, '-', color='orange',  linewidth=1)
-            if len(data) == 3:
+            self.axe.plot(x, y, 'k', color='orange',  linewidth=1, label="Original Data")
+            if len(data) == 4:
                 y_th = data[2]
-                self.axe.plot(x, y_th, '--', color='blue',  linewidth=1)
+                if(len(x)!=len(y_th)):
+                    min_len = min(len(x), len(y_th))
+                    x, y_th = x[:min_len], y_th[:min_len]
+                model, err = data[3]
+                self.axe.plot(x, y_th, 'k--', color='blue',  linewidth=1, label="Best Model {} {}".format(DistributionModel(model).name, format(err, '.2f')))
+            self.axe.legend(loc='upper right', shadow=False, fontsize='small')
         else:
             self.lines = self.axe.plot(data, '-', color='blue', linewidth=1)
         self.draw()
@@ -75,7 +84,7 @@ class Plot_Widget(FigureCanvasQTAgg):
     def draw_doppler(self, x, y):
         self.axe.cla()
         #self.axe.set_title('time doppler - range{}'.format(rangebin+1), color='white', fontweight='bold');
-        self.axe.set_title('time doppler', color='white', fontweight='semibold');
+        self.resetAxisInfo()
         #self.axe.set_xlabel('time(s)', color='white', fontweight='semibold');
         #self.axe.set_ylabel('doppler(m/s)', color='white', fontweight='semibold');
         #self.axe.pcolormesh(x, y, z, cmap='jet')
@@ -87,6 +96,7 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.dopplerResultX, self.dopplerResultY = x, y
     def draw_dopplerResult(self, z):
         self.axe.cla()
+        self.resetAxisInfo()
         self.axe.pcolormesh(self.dopplerResultX, self.dopplerResultY, z, cmap='cubehelix')
         self.draw()
         self.clean = False

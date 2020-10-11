@@ -1,3 +1,4 @@
+from Observer import Observable
 class System_Infomations():
     def __init__(self):
         #logdistribution
@@ -19,7 +20,7 @@ class System_Infomations():
         self.fengji = 8
         self.fengji_changed = True
         #platform 
-        self.timestamp = 0
+        self.timestamp = Observable()
         self.jing = 10
         self.wei = 20
         self.height = 1000

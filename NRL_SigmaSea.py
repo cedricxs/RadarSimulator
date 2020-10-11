@@ -47,6 +47,7 @@ class NRL_SigmaSea_Calculeur:
         self.determinerSS()
         if type(self.sys_info.Psi).__name__ == 'float':
             self.determinerPsi()
+        self.preciserPsi()
         self.SigZ = self.CC1 + self.CC2*np.log10(np.sin(self.Psi_rad)) + (27.5+self.CC3*self.sys_info.Psi)*np.log10(self.sys_info.fGHz)/ (1.+0.95*self.sys_info.Psi) + self.CC4*(self.SS+1)**(1.0 /(2+0.085*self.sys_info.Psi+0.033*self.SS))+self.CC5*self.sys_info.Psi**2;
         self.sample()
         print("calculer nrl:"+str(time.time()-start))
@@ -63,6 +64,25 @@ class NRL_SigmaSea_Calculeur:
             acc_Psi[x, :] = self.sys_info.Psi+np.arccos((c*t)/(2*(int(x/10)+1)*30))
         self.sys_info.Psi = acc_Psi
         self.Psi_rad = np.deg2rad(self.sys_info.Psi)
+    def preciserPsi(self):
+        x, y = int(self.seaHeight.shape[0]/2), int(self.seaHeight.shape[1]/2)
+        x_k, y_k = x+1, y+1
+        z, z_x, z_y = self.seaHeight[x][y], self.seaHeight[x_k][y], self.seaHeight[x][y_k]
+        k_x, k_y = z_x-z, z_y-z
+        #print("k_x {} k_y {}".format(k_x, k_y))
+#        fn_x = -1
+#        fn_y = -k_y/k_x
+#        fn_z = 1/k_x
+        #切面法向量(-1,-k_y/k_x,1/k_x)
+        #入射角向量(1,0,-√3)
+        #夹角arccos( (a*b)/(|a|*|b|) )
+        rad_Psi = np.arccos((-1-np.sqrt(3)/k_x)/(np.sqrt((k_x**2+k_y**2+1)/(k_x**2))*2))
+        if rad_Psi>np.pi/2:
+            rad_Psi = rad_Psi-np.pi/2
+        Psi = np.rad2deg(rad_Psi)
+        self.sys_info.Psi[x][y] = Psi
+        self.Psi_rad[x][y] = rad_Psi    
+        #print("after preciser: "+str(rad_Psi))   
     def determinerSS(self):
         self.SS = np.zeros([len(self.seaHeight), len(self.seaHeight[0])]);
         for i in range(len(self.seaHeight)):

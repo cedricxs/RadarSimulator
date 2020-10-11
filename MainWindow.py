@@ -20,6 +20,7 @@ from logReturnRadar import LogReturnRadar
 from Mayavi_Widget import MayaviQWidget, Visualization
 from System_Infomations import System_Infomations
 from PlotThread import plotThread, plotDopplerThread
+from FitModel import ModelFitter
 import csv
                 
         
@@ -47,7 +48,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.doppler = Doppler(self.sys_info)
         self.doppler_count = 0
         self.logReturnRadar = LogReturnRadar(self.sys_info)
-        
+        self.modelFitter = ModelFitter()
+        self.best_Y_Theorie = None
         #################### setUp All Plot widgets ########################
         #self.setWindowFlags(Qt.FramelessWindowHint)
         self.setupAllPlotWidget()
@@ -57,8 +59,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.stackedWidget_2.setCurrentIndex(5)
         Visualization.plotStatus = 0
         self.plot3d_widget.visualization.plot_static()
-        self.plot3d_widget.updateSize()
-        self.radioButton_9.setChecked(True)
         
         #################### Init All information labels########################
         self.update_para()
@@ -66,17 +66,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.dialog_para_env = Dialog_para_env(self.sys_info, self)
         self.dialog_para_platform = Dialog_para_platform(self.sys_info, self)
         self.action_7.setEnabled(False)
+        
+        ################### Connect All Relation of Observer####################
+        self.sys_info.timestamp.addObservateur(self.lineEdit_2)
+        self.sys_info.timestamp.addObservateur(self.dialog_para_platform.lineEdit_27)
     
     def setupAllPlotWidget(self):
         
         ####################### RealTime 海杂波数据 Index 0#####################
         self.plot_widget1 = Plot_Widget(self.widget_5)
         self.plot_widget2 = Plot_Widget(self.widget)
-        self.plot_widget3 = Plot_Widget(self.widget_1)
+        #self.plot_widget3 = Plot_Widget(self.widget_1)
         
         self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
         self.plot_widget2.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
-        self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
+        #self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
 
         ####################### 幅度统计分布模型log分布 Index 1#####################
         self.plot_widget4 = Plot_Widget(self.widget_4)
@@ -111,6 +115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.logReturnRadar_plot_widget = Plot_Widget(self.widget_21)
         self.dopplerRes_widget = self.logReturnRadar_plot_widget
         self.dopplerRes_widget.set_facecolor('black')
+        self.dopplerRes_widget.setPara('time doppler','m/s', 'time')
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
         self.plot3d_widget = MayaviQWidget(self.sys_info, self.widget_19)
@@ -153,7 +158,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.lineEdit_11.setText(str(self.sys_info.fengji))
             self.seaDataGen.update_para()
             self.sys_info.fengji_changed = False
-        self.lineEdit_2.setText(str(self.sys_info.timestamp))
+        self.lineEdit_2.setText(str(self.sys_info.timestamp.value))
     
     @pyqtSlot()
     def on_pushButton_clicked(self):
@@ -192,41 +197,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #mainWindow.resize(880, 600)
         sys.exit(app.exec_())
 
-    @pyqtSlot()
-    def on_radioButton_7_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        #if self.radioButton.isChecked():
-        self.stackedWidget_2.setCurrentIndex(0)
-        #elif self.radioButton_2.isChecked():
-        #self.stackedWidget_2.setCurrentIndex(1)
-        #elif self.radioButton_3.isChecked():
-        #self.stackedWidget_2.setCurrentIndex(3)
-        
-    
-    
-    @pyqtSlot()
-    def on_radioButton_9_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(5)
-        Visualization.plotStatus = 0
-        self.plot3d_widget.visualization.plot_static()
-        self.plot3d_widget.updateSize()
-    
-    @pyqtSlot()
-    def on_radioButton_10_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(5)
-        Visualization.plotStatus = 1
-        self.plot3d_widget.visualization.plot_static()
-        self.plot3d_widget.updateSize()
-    
-
     
     @pyqtSlot()
     def on_pushButton_8_clicked(self):
@@ -243,16 +213,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #            self.doppler_count = 0
         self.plotDopplerRealTime()
 
- 
-    
-    @pyqtSlot()
-    def on_radioButton_11_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(4)
-        self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
-        self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
+
     
     @pyqtSlot()
     def on_action_triggered(self):
@@ -323,7 +284,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         filename = QFileDialog.getSaveFileName(self, "保存数据","sea_clutter_data",  "csv (*.csv);;Text files (*.txt);;XML files (*.xml)")
         self.create_csv(filename[0])
-    
     def create_csv(self, filepath):
         with open(filepath,'w', newline='', encoding='utf-8') as file:
             csv_write = csv.writer(file)
@@ -332,3 +292,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             csv_head_value = self.sys_info.valuelist()
             csv_write.writerow(csv_head_value)
             csv_write.writerows([[value] for value in self.nrlDataGen.sample_data])
+    
+    @pyqtSlot()
+    def on_action_4_triggered(self):
+        """
+        Slot documentation goes here.
+        """
+        self.stackedWidget_2.setCurrentIndex(5)
+        Visualization.plotStatus = 0
+        self.plot3d_widget.visualization.plot_static()
+        self.plot3d_widget.updateSize()
+    
+    @pyqtSlot()
+    def on_action_9_triggered(self):
+        """
+        Slot documentation goes here.
+        """
+        self.stackedWidget_2.setCurrentIndex(5)
+        Visualization.plotStatus = 1
+        self.plot3d_widget.visualization.plot_static()
+        self.plot3d_widget.updateSize()
+    
+    @pyqtSlot()
+    def on_action_11_triggered(self):
+        """
+        Slot documentation goes here.
+        """
+        self.stackedWidget_2.setCurrentIndex(0)
+    
+    @pyqtSlot()
+    def on_action_13_triggered(self):
+        """
+        Slot documentation goes here.
+        """
+        self.stackedWidget_2.setCurrentIndex(4)
+        self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
+        self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
