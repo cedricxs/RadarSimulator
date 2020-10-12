@@ -312,4 +312,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         mainWindow.show()
         #mainWindow.resize(880, 600)
         sys.exit(app.exec_())
-        
+    
+    @pyqtSlot()
+    def on_action_8_triggered(self):
+        """
+        Slot documentation goes here.
+        """
+        self.run = False
+        if hasattr(self, 'animation'):
+            self.animation.stop = True
+        self.action_7.setEnabled(False)
+        self.action_2.setEnabled(True)
+        self.close()
