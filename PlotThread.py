@@ -3,21 +3,19 @@ import threading
 import time
 from doppler import Doppler
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
+from SeaDataGenertor import SeaData
 
-class plotThread (threading.Thread):   #继承父类threading.Thread
-    def lognpdf(x,mu,sigma):
-        return np.exp(-0.5 * ((np.log(x) - mu)/sigma)**2) / (x * np.sqrt(2*np.pi) * sigma)
-        
+class plotStatisticThread (threading.Thread):   #继承父类threading.Thread
     def __init__(self, parent):
         super().__init__()
         self.count = 0
         self.parent = parent
         self.ytheorie = None
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
-        while self.parent.run == True:
+        while self.parent.plotRun == True:
             start = time.time()
-            self.count = self.count+1
             self.parent.sys_info.timestamp.add(1)
+            self.count = self.count+1
             xdata = np.array(NRL_SigmaSea_Calculeur.getInstance().sample_data)
             if len(xdata)>0:
                 if len(xdata)>100:
@@ -41,9 +39,21 @@ class plotThread (threading.Thread):   #继承父类threading.Thread
                             self.parent.plot_widget2.updateData([xaixs, xpdf, self.parent.best_Y_Theorie, [model, minErr]])
                         else: 
                             self.parent.plot_widget2.updateData([xaixs, xpdf])
-            print("plot:"+str(time.time()-start))
+            print("plot statistic:"+str(time.time()-start))
             time.sleep(1)
-            
+        
+#更新三维数据并通知相关widget更新
+class plotMayaviThread(threading.Thread):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
+    def run(self):                   
+        while self.parent.plotRun == True:
+            x, y , z = SeaData.getInstance().getSeaData()
+            nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
+            self.parent.sys_info.z.set(z)
+            self.parent.sys_info.nrl.set(nrl)
+            #time.sleep(0.05)
             
 class plotDopplerThread (threading.Thread):   #继承父类threading.Thread
     def __init__(self, parent):

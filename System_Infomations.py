@@ -1,4 +1,6 @@
-from Observer import Observable
+from Observer import TimeObservable, SeaDataObservable
+from SeaDataGenertor import SeaData
+from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 class System_Infomations():
     def __init__(self):
         #logdistribution
@@ -20,13 +22,25 @@ class System_Infomations():
         self.fengji = 8
         self.fengji_changed = True
         #platform 
-        self.timestamp = Observable()
+        self.timestamp = TimeObservable()
         self.jing = 10
         self.wei = 20
         self.height = 1000
-        
+        self.x = None
+        self.y = None
+        self.z = SeaDataObservable()
+        self.nrl = SeaDataObservable()
+    def initialize(self):
+        self.timestamp.set(0)
+        x, y, z = SeaData.getInstance().getSeaData()
+        nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
+        print('for sys')
+        self.x = x
+        self.y = y
+        self.z.set(z)
+        self.nrl.set(nrl)
     def paralist(self):
         return ["载波频率","入射角","风向", "风级", "时间", "经度", "纬度", "高度"]
     def valuelist(self):
-        return [self.fGHz, self.Psi_raw, self.ThWind, self.fengji, self.timestamp, self.jing, self.wei, self.height]
+        return [self.fGHz, self.Psi_raw, self.ThWind, self.fengji, self.timestamp.value, self.jing, self.wei, self.height]
        

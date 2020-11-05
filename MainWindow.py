@@ -4,22 +4,23 @@
 Module implementing MainWindow.
 """
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5 import  QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
-from Plot_Widget import Plot_Widget
+from Plot_Widget import Plot_Widget, Plot_Widget_QChart
 from Ui_MainWindow import Ui_MainWindow
 from Dialog_Para_radar import Dialog_para_radar
 from Dialog_Para_env import Dialog_para_env
 from Dialog_para_platform import Dialog_para_platform
+from Glissant_Menu import Glissant_Menu
 from logDistribution import LogDistribution
 from SeaDataGenertor import SeaData
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 from doppler import Doppler
 from logReturnRadar import LogReturnRadar
-from Mayavi_Widget import MayaviQWidget, Visualization
+from Mayavi_Widget import MayaviQWidget
 from System_Infomations import System_Infomations
-from PlotThread import plotThread, plotDopplerThread
+from PlotThread import plotStatisticThread, plotDopplerThread, plotMayaviThread 
 from FitModel import ModelFitter
 import csv
                 
@@ -51,31 +52,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.modelFitter = ModelFitter()
         self.best_Y_Theorie = None
         #################### setUp All Plot widgets ########################
-        #self.setWindowFlags(Qt.FramelessWindowHint)
+        #设置无边框
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.setupAllPlotWidget()
     
         
         #################### Init default Index########################
         self.stackedWidget_2.setCurrentIndex(5)
-        Visualization.plotStatus = 0
-        self.plot3d_widget.visualization.plot_static()
         
+        #在使用观察者模式后不需要此块
         #################### Init All information labels########################
         self.update_para()
         self.dialog_para_radar = Dialog_para_radar(self.sys_info, self)
         self.dialog_para_env = Dialog_para_env(self.sys_info, self)
         self.dialog_para_platform = Dialog_para_platform(self.sys_info, self)
+        self.glissant_menu = Glissant_Menu(self.sys_info, self)
+        self.glissant_menu.show()
         self.action_7.setEnabled(False)
         
         ################### Connect All Relation of Observer####################
-        self.sys_info.timestamp.addObservateur(self.lineEdit_2)
-        self.sys_info.timestamp.addObservateur(self.dialog_para_platform.lineEdit_27)
-    
+        self.sys_info.timestamp.addObservateur(self.timeEdit)
+        self.sys_info.timestamp.addObservateur(self.dialog_para_platform.timeEdit)
+        self.sys_info.z.addObservateur(self.plot3d_z_widget)
+        self.sys_info.nrl.addObservateur(self.plot3d_nrl_widget)
+        ######################触发更新所有视图###########################
+        self.sys_info.initialize() 
+    #def updateLayout(self):
+        
     def setupAllPlotWidget(self):
         
         ####################### RealTime 海杂波数据 Index 0#####################
-        self.plot_widget1 = Plot_Widget(self.widget_5)
-        self.plot_widget2 = Plot_Widget(self.widget)
+        self.plot_widget1 = Plot_Widget(self.widget_14)
+        self.plot_widget2 = Plot_Widget(self.widget_15)
         #self.plot_widget3 = Plot_Widget(self.widget_1)
         
         self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
@@ -118,10 +126,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.dopplerRes_widget.setPara('time doppler','m/s', 'time')
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
-        self.plot3d_widget = MayaviQWidget(self.sys_info, self.widget_19)
-        
+        self.plot3d_z_widget = MayaviQWidget(self.sys_info, self.widget_13, 0)
+        self.plot3d_nrl_widget = MayaviQWidget(self.sys_info, self.widget_19, 1)
+
     def plot3D(self):
-        self.animation = Visualization.animation()
+        self.plotMayaviThread = plotMayaviThread(self)
+        self.plotMayaviThread.start()
     def update_AmStDisModel(self):
         self.stackedWidget_2.setCurrentIndex(1)
         self.plot_widget4.resize(self.plot_widget4.parent().size())
@@ -135,14 +145,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plot_widget5.updateData([xaxis1, xpdf1, th_val])
         self.plot_widget6.updateData([fre, psd, powerf])   
     
-    def plotRealtime(self):
-        self.run = True
+    def plotRealtimeStatistic(self):
         #self.plot_widget1.start_animation()
-        self.plotThread = plotThread(self)
-        self.plotThread.start()
+        self.plotStatisticThread = plotStatisticThread(self)
+        self.plotStatisticThread.start()
         
     def plotDopplerRealTime(self):
-        self.run = True
         self.doppler.calcul(0)
         self.plotDopplerThread = plotDopplerThread(self)
         self.plotDopplerThread.start()
@@ -158,7 +166,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.lineEdit_11.setText(str(self.sys_info.fengji))
             self.seaDataGen.update_para()
             self.sys_info.fengji_changed = False
-        self.lineEdit_2.setText(str(self.sys_info.timestamp.value))
     
     @pyqtSlot()
     def on_pushButton_clicked(self):
@@ -188,7 +195,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif self.stackedWidget_2.currentIndex() ==  4:
             self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
         elif self.stackedWidget_2.currentIndex() ==  5:
-            self.plot3d_widget.updateSize()
+            self.plot3d_z_widget.updateSize()
+            self.plot3d_nrl_widget.updateSize()
+            self.plot_widget1.resize(self.plot_widget1.parent().size())
+            self.plot_widget2.resize(self.plot_widget2.parent().size())
 
     @pyqtSlot()
     def on_action_triggered(self):
@@ -237,20 +247,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        self.run = False
-        self.animation.stop = True
+        self.pauseRun()
+    
+    def startRun(self):
+        self.plotRun = True
+        self.plot3D()
+        self.plotRealtimeStatistic()
+        self.action_7.setEnabled(True)
+        self.action_2.setEnabled(False)
+        
+    def pauseRun(self):
+        self.plotRun = False
         self.action_7.setEnabled(False)
         self.action_2.setEnabled(True)
-    
     @pyqtSlot()
     def on_action_2_triggered(self):
         """
         Slot documentation goes here.
         """
-        self.plot3D()
-        self.plotRealtime()
-        self.action_7.setEnabled(True)
-        self.action_2.setEnabled(False)
+        self.startRun()
     
     @pyqtSlot()
     def on_action_6_triggered(self):
@@ -274,9 +289,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.stackedWidget_2.setCurrentIndex(5)
-        Visualization.plotStatus = 0
-        self.plot3d_widget.visualization.plot_static()
-        self.plot3d_widget.updateSize()
     
     @pyqtSlot()
     def on_action_9_triggered(self):
@@ -284,9 +296,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.stackedWidget_2.setCurrentIndex(5)
-        Visualization.plotStatus = 1
-        self.plot3d_widget.visualization.plot_static()
-        self.plot3d_widget.updateSize()
     
     @pyqtSlot()
     def on_action_11_triggered(self):
@@ -318,9 +327,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        self.run = False
-        if hasattr(self, 'animation'):
-            self.animation.stop = True
-        self.action_7.setEnabled(False)
-        self.action_2.setEnabled(True)
+        self.pauseRun()
         self.close()

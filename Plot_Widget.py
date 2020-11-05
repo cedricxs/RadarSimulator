@@ -139,3 +139,52 @@ class Plot_Widget3D_Matplt(Plot_Widget):
         self.axe.set_axis_off()
         self.draw()
         self.clean = False
+from PyQt5.QtChart import *
+class Plot_Widget_QChart(QChartView):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.resize(parent.size())
+    def setPara(self, axe_title = '', axe_xlabel = '',  axe_ylabel = ''):
+        
+        self.x_Aix = QValueAxis()#定义x轴，实例化
+        #self.x_Aix.setRange(0.00,5.00) #设置量程
+        self.x_Aix.setTitleText(axe_xlabel)
+        #self.x_Aix.setLabelFormat("%0.2f")#设置坐标轴坐标显示方式，精确到小数点后两位
+        #self.x_Aix.setTickCount(6)#设置x轴有几个量程
+        #self.x_Aix.setMinorTickCount(0)#设置每个单元格有几个小的分级
+        self.y_Aix = QValueAxis()#定义y轴
+        #self.y_Aix.setRange(0.00,6.00)
+        #self.y_Aix.setLabelFormat("%0.2f")
+        self.y_Aix.setTitleText(axe_ylabel)
+        #self.y_Aix.setTickCount(7)
+        #self.y_Aix.setMinorTickCount(0)
+        self.chart().setAxisX(self.x_Aix) #设置x轴属性
+        self.chart().setAxisY(self.y_Aix) #设置y轴属性
+        self.chart().setTitle(axe_title) #设置标题		
+        self.show()#显示charView
+    def updateData(self, data):
+#        for serie in self.chart().series() :
+#            self.chart().removeSeries(serie)
+        if type(data).__name__=='list':
+            x = data[0]
+            y = data[1]
+            if(len(x)!=len(y)):
+                min_len = min(len(x), len(y))
+                x, y = x[:min_len], y[:min_len]
+            self.series_1 = QLineSeries()
+            for i, j in zip(x, y):
+                self.series_1.append(i, j)
+                self.series_1.setName("折线一")
+            self.chart().addSeries(self.series_1)
+            if len(data) == 4:
+                y_th = data[2]
+                if(len(x)!=len(y_th)):
+                    min_len = min(len(x), len(y_th))
+                    x, y_th = x[:min_len], y_th[:min_len]
+                model, err = data[3]
+                self.series_2 = QLineSeries()
+                for i, j in zip(x, y_th):
+                    self.series_2.append(i, j)
+                    self.series_2.setName("折线二")
+                self.chart().addSeries(self.series_2)
+        

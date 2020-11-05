@@ -52,20 +52,17 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_27">
-          <property name="maximumSize">
-           <size>
-            <width>80</width>
-            <height>16777215</height>
-           </size>
+         <widget class="QTimeEdit" name="timeEdit">
+          <property name="enabled">
+           <bool>false</bool>
           </property>
           <property name="font">
            <font>
-            <family>黑体</family>
+            <pointsize>10</pointsize>
            </font>
           </property>
-          <property name="readOnly">
-           <bool>false</bool>
+          <property name="displayFormat">
+           <string>hh:mm:ss</string>
           </property>
          </widget>
         </item>

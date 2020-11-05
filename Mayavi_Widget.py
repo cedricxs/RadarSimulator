@@ -14,13 +14,11 @@ from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 
 class Visualization(HasTraits):
     scene = Instance(MlabSceneModel, ())
-    def __init__(self, sys_info):
-        Visualization.plotStatus = 0
+    def __init__(self, sys_info, plotType):
+        self.plotType = plotType
         super().__init__()
     @on_trait_change('scene.activated')
-    def update_plot(self):
-    ## PLot to Show        
-        [Visualization.x, Visualization.y , Visualization.z] = SeaData.getInstance().getSeaData()
+    def initialize(self):
         f = mlab.gcf()
         f.scene.render_window.point_smoothing = True
         f.scene.render_window.line_smoothing = True
@@ -28,29 +26,15 @@ class Visualization(HasTraits):
         f.scene.render_window.multi_samples = 8 # Try with 4 if you think this is slow
         f.scene.anti_aliasing_frames = True
         f.scene.background = (0, 0, 0)
-        mlab.axes(x_axis_visibility=True, y_axis_visibility=True, z_axis_visibility=True)
+        x, y , z = SeaData.getInstance().getSeaData()
+        nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
+        if self.plotType == 0:
+            self.obj = surf(x, y,z, colormap='ocean')
+        elif self.plotType == 1:
+            self.obj = surf(x, y,nrl, colormap='blue-red')
+        mlab.orientation_axes()
         mlab.draw()
-        
-    def plot_static(self):
-        mlab.clf()
-        if Visualization.plotStatus == 0:
-            Visualization.obj = surf(Visualization.x, Visualization.y,Visualization.z, colormap='ocean')
-        else:
-            nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(Visualization.z)
-            Visualization.obj = surf(Visualization.x, Visualization.y,nrl, colormap='blue-red') 
-     
-    @mlab.animate(delay=100, ui=False)
-    def animation():
-        while True:
-            [Visualization.x, Visualization.y , Visualization.z] = SeaData.getInstance().getSeaData()
-            ms = Visualization.obj.mlab_source
-            if Visualization.plotStatus == 1:
-                nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(Visualization.z)
-                ms.scalars = nrl
-            else:
-                ms.scalars = Visualization.z
-            #这里如果是mesh则为z, 如果surf则为scalar
-            yield
+
     view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene),
                      height=1, width=1, show_label=False),
                 resizable=True , x=0, y=0)
@@ -58,19 +42,23 @@ class Visualization(HasTraits):
     
 
 class MayaviQWidget(QtGui.QWidget):
-    def __init__(self, sys_info, parent=None):
+    def __init__(self, sys_info, parent, plotType):
         QtGui.QWidget.__init__(self, parent)
         
-        self.visualization = Visualization(sys_info)
+        self.visualization = Visualization(sys_info, plotType)
 
         self.ui = self.visualization.edit_traits(parent=self,
                                                  kind='subpanel').control
         self.ui.setParent(self)
+        self.setParent(parent)
         self.ui.move(0, 0)
         self.resize(parent.size())
         self.ui.resize(parent.size())
-    
+        
     def updateSize(self):
         self.resize(self.parent().size())
         self.ui.resize(self.parent().size()) 
-    
+        
+    #here data is z or nrl
+    def update(self, data):
+        self.visualization.obj.mlab_source.scalars = data

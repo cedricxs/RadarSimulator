@@ -7,14 +7,14 @@ class ModelFitter:
 
     def __init__(self):
         pass
-    
-    def bestFitter(self, perrs):
-        min, index = perrs[0], 0
-        for i in range(1, len(perrs)):
-            if perrs[i] < min:
+    def MAE(self, y, yfit):
+        return ((np.abs((y-yfit))).sum())/len(y)
+    def bestFitter(self, MAEs):
+        min, index = MAEs[0], 0
+        for i in range(1, len(MAEs)):
+            if MAEs[i] < min:
                 index = i
-                min = perrs[i]
-            print(perrs[i])
+                min = MAEs[i]
         return [min, index+1]
     def fit(self, x, y):
         try:
@@ -22,20 +22,25 @@ class ModelFitter:
             popt2, pcov2 = curve_fit(DistributionModel.kDistribution,  x, y, bounds=([0, 0], [100, 100]))#训练函数
             popt3, pcov3 = curve_fit(DistributionModel.rayliDistribution,  x, y, bounds=([0], [100]))#训练函数
             popt4, pcov4 = curve_fit(DistributionModel.weibullDistribution,  x, y, bounds=([0, 0], [100, 100]))#训练函数
-            perr1  = np.sqrt(np.diag(pcov1))[0]
-            perr2  = np.sqrt(np.diag(pcov2))[0]
-            perr3  = np.sqrt(np.diag(pcov3))[0]
-            perr4  = np.sqrt(np.diag(pcov4))[0]
-            minErr, model = self.bestFitter([perr1, perr2, perr3, perr4])
+            #参数估计的标准差
+#            perr1  = np.sqrt(np.diag(pcov1))[0]
+#            perr2  = np.sqrt(np.diag(pcov2))[0]
+#            perr3  = np.sqrt(np.diag(pcov3))[0]
+#            perr4  = np.sqrt(np.diag(pcov4))[0]
+            y_Theorie1 = DistributionModel.lognpdfModel(x, popt1[0], popt1[1])
+            y_Theorie2 = DistributionModel.kDistribution(x, popt2[0], popt2[1])
+            y_Theorie3 = DistributionModel.rayliDistribution(x, popt3[0])
+            y_Theorie4 = DistributionModel.weibullDistribution(x, popt4[0], popt4[1])
+            minErr, model = self.bestFitter([self.MAE(y, y_Theorie1), self.MAE(y, y_Theorie2), self.MAE(y, y_Theorie3), self.MAE(y, y_Theorie4)])
             if model == DistributionModel.Logn:
-                y_Theorie = DistributionModel.lognpdfModel(x, popt1[0], popt1[1])
+                y_Theorie = y_Theorie1
                 print("para : {} {}".format(popt1[0], popt1[1]))
             elif model == DistributionModel.K:
-                y_Theorie = DistributionModel.lognpdfModel(x, popt2[0], popt2[1])
+                y_Theorie = y_Theorie2
             elif model == DistributionModel.Rayli:
-                y_Theorie = DistributionModel.lognpdfModel(x, popt3[0])
+                y_Theorie = y_Theorie3
             elif model == DistributionModel.Weibull:
-                y_Theorie = DistributionModel.lognpdfModel(x, popt4[0], popt4[1])
+                y_Theorie = y_Theorie4
             return [model, minErr, y_Theorie]
         except:
             return [0, 0, None]
