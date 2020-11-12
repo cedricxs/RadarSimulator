@@ -7,7 +7,7 @@ Module implementing MainWindow.
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5 import  QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
-from Plot_Widget import Plot_Widget, Plot_Widget_QChart
+from Plot_Widget import Plot_Widget
 from Ui_MainWindow import Ui_MainWindow
 from Dialog_Para_radar import Dialog_para_radar
 from Dialog_Para_env import Dialog_para_env
