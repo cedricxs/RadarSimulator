@@ -52,6 +52,7 @@ class NRL_SigmaSea_Calculeur:
         self.sample()
         print("calculer nrl:"+str(time.time()-start))
         return self.SigZ
+        #return self.getReturnRadar()
         
     def sample(self):
         self.sample_data.append(abs(self.SigZ[int(self.SigZ.shape[0]/2)][int(self.SigZ.shape[1]/2)]))
@@ -102,3 +103,41 @@ class NRL_SigmaSea_Calculeur:
                 elif 20<self.seaHeight[i][j]<40:
                     self.SS[i][j] = 7
         
+    def getReturnRadar(self):
+        # %radar  function
+        # function [snr] = radar_eq(pt,freq,g,sigma,te,b,nf,loss,range)
+        # %This is a program of radar eq
+
+        pt = 1.5e+6; # % peak power in Watts
+        freq = 5.6e+9; # radar operating frequency in Hz
+        g = 45.0; # antenna gain in dB
+        # % Pol = 'H';
+        # % alpha=0.1;
+        # % SS=6;
+        # % Psi=0;
+        # % ThWind=0;
+        te = 1
+        b = 1
+        nf = 1
+        loss = 1
+        range_ = np.linspace(25e3,165e3,1000); 
+        # % sigma=0.1;
+        c=3.0e+8; 
+        lambda_ =c/freq; 
+        p_peak=10*np.log10(pt);  # convert peak power to dB
+        lambda_sqdb=10*np.log10(lambda_**2);  #computr wavelength square in dB
+        sigmadb=10*np.log10(np.abs(self.SigZ)); #convert sigma to dB
+        four_pi_cub=10*np.log10((4*np.pi)**3);  #(4pi)^3 in dB
+        k_db=10*np.log10(1.3e-23); #boltzman's constant in dB
+        te_db=10*np.log10(te);  #noisetemp. in dB
+        b_db=10*np.log10(b);  #bandwidth in dB
+        range_pwr4_db=10*np.log10(range_**4); #vector of target range_**4 in dB
+        #implement Equation(1.56)
+        num=p_peak+g+g+lambda_sqdb+sigmadb; #分子
+        num1=pt*g*g*lambda_*lambda_*self.SigZ
+        den=four_pi_cub+k_db+te_db+b_db+nf+loss+range_pwr4_db;#分母
+        den1=(4*np.pi)**3*(range_**4)*loss
+        #snr=num-den;
+        pr=num1/(den1)
+        snr=pr
+        return snr

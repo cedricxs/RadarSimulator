@@ -56,10 +56,10 @@ from mayavi.mlab import  surf
 #        time_count+=10;
 #        yield
 
-x = range(0, 77);
-y = range(2649, 2845, 15);
+x = range(0, 77)
+y = range(2649, 2845, 15)
 x, y = np.mgrid[x, y]
-data = [np.zeros((77, 14)) for i in range(8)];
+data = [np.zeros((77, 14)) for i in range(8)]
 from System_Infomations import System_Infomations
 logsrc = LogReturnRadar(System_Infomations())
 datasrc = logsrc.data
@@ -71,18 +71,18 @@ length = logsrc.nsweep
 from matplotlib import pyplot as plt
 fig = plt.figure()
 ax = Axes3D(fig)
-time_count = 0;
+time_count = 0
 
 while True:
     if time_count >= length:
-        break;
+        break
     else:
         index = int((azi[time_count]-azi_min)/azi_ecart)
         for i in range(2):
             for j in range(4):
                 values = datasrc[time_count, i, :, j]
-                data[i*4+j][index, :] = values;
-    time_count+=1;
+                data[i*4+j][index, :] = values
+    time_count+=1
 ax.plot_surface(x, y, data[0], rstride=1, cstride=1, cmap='jet')
 ax.set_xlabel('azimuth')
 ax.set_ylabel('range')

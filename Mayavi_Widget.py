@@ -17,21 +17,32 @@ class Visualization(HasTraits):
     def __init__(self, sys_info, plotType):
         self.plotType = plotType
         super().__init__()
+    
+    def getFigure(self):
+        return self.figure
+
+    def close(self):
+        return mlab.close(all = True)
+
     @on_trait_change('scene.activated')
     def initialize(self):
-        f = mlab.gcf()
-        f.scene.render_window.point_smoothing = True
-        f.scene.render_window.line_smoothing = True
-        f.scene.render_window.polygon_smoothing = True
-        f.scene.render_window.multi_samples = 8 # Try with 4 if you think this is slow
-        f.scene.anti_aliasing_frames = True
-        f.scene.background = (0, 0, 0)
+        self.figure = mlab.gcf()
+        self.figure.scene.render_window.point_smoothing = True
+        self.figure.scene.render_window.line_smoothing = True
+        self.figure.scene.render_window.polygon_smoothing = True
+        self.figure.scene.render_window.multi_samples = 8 # Try with 4 if you think this is slow
+        self.figure.scene.anti_aliasing_frames = True
+        self.figure.scene.background = (0, 0, 0)
         x, y , z = SeaData.getInstance().getSeaData()
         nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
         if self.plotType == 0:
-            self.obj = surf(x, y,z, colormap='ocean')
+            self.obj = surf(x, y,z,colormap='ocean')
+            #mlab.colorbar(object=self.obj,title='sea surface')
+            mlab.title('sea surface',figure = self.figure,line_width = 1.0)
         elif self.plotType == 1:
-            self.obj = surf(x, y,nrl, colormap='blue-red')
+            self.obj = surf(x, y,nrl,colormap='blue-red')
+            #mlab.colorbar(object=self.obj,title='return radar')
+            mlab.title('return radar',figure = self.figure,line_width = 1.0)
         mlab.orientation_axes()
         mlab.draw()
 
@@ -62,3 +73,6 @@ class MayaviQWidget(QtGui.QWidget):
     #here data is z or nrl
     def update(self, data):
         self.visualization.obj.mlab_source.scalars = data
+
+    def close(self):
+        return self.visualization.close()

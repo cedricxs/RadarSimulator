@@ -35,10 +35,10 @@ class plotStatisticThread (threading.Thread):   #继承父类threading.Thread
                         
                         if self.count%15 == 0:
                             [model, minErr, self.parent.best_Y_Theorie] = self.parent.modelFitter.fit(xaixs, xpdf)
-                        if self.parent.best_Y_Theorie is not None:    
-                            self.parent.plot_widget2.updateData([xaixs, xpdf, self.parent.best_Y_Theorie, [model, minErr]])
-                        else: 
-                            self.parent.plot_widget2.updateData([xaixs, xpdf])
+                            if self.parent.best_Y_Theorie is not None:    
+                                self.parent.plot_widget2.updateData([xaixs, xpdf, self.parent.best_Y_Theorie, [model, minErr]])
+                            else: 
+                                self.parent.plot_widget2.updateData([xaixs, xpdf])
             print("plot statistic:"+str(time.time()-start))
             time.sleep(1)
         

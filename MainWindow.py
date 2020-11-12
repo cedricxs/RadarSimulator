@@ -84,6 +84,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         ####################### RealTime 海杂波数据 Index 0#####################
         self.plot_widget1 = Plot_Widget(self.widget_14)
         self.plot_widget2 = Plot_Widget(self.widget_15)
+        self.plot_widget1.set_facecolor('black')
+        self.plot_widget2.set_facecolor('black')
         #self.plot_widget3 = Plot_Widget(self.widget_1)
         
         self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
@@ -128,6 +130,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
         self.plot3d_z_widget = MayaviQWidget(self.sys_info, self.widget_13, 0)
         self.plot3d_nrl_widget = MayaviQWidget(self.sys_info, self.widget_19, 1)
+    def close3DPlotWidget(self):
+        self.plot3d_z_widget.close()
+        self.plot3d_nrl_widget.close()
 
     def plot3D(self):
         self.plotMayaviThread = plotMayaviThread(self)
@@ -275,13 +280,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename = QFileDialog.getSaveFileName(self, "保存数据","sea_clutter_data",  "csv (*.csv);;Text files (*.txt);;XML files (*.xml)")
         self.create_csv(filename[0])
     def create_csv(self, filepath):
-        with open(filepath,'w', newline='', encoding='utf-8') as file:
-            csv_write = csv.writer(file)
-            csv_head_name = self.sys_info.paralist()
-            csv_write.writerow(csv_head_name)
-            csv_head_value = self.sys_info.valuelist()
-            csv_write.writerow(csv_head_value)
-            csv_write.writerows([[value] for value in self.nrlDataGen.sample_data])
+        if filepath is not None:
+            with open(filepath,'w', newline='', encoding='utf-8') as file:
+                csv_write = csv.writer(file)
+                csv_head_name = self.sys_info.paralist()
+                csv_write.writerow(csv_head_name)
+                csv_head_value = self.sys_info.valuelist()
+                csv_write.writerow(csv_head_value)
+                csv_write.writerows([[value] for value in self.nrlDataGen.sample_data])
     
     @pyqtSlot()
     def on_action_4_triggered(self):
@@ -328,4 +334,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.pauseRun()
+        self.close3DPlotWidget()
         self.close()
