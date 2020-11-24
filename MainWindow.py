@@ -6,14 +6,14 @@ Module implementing MainWindow.
 
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5 import  QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication
 from Plot_Widget import Plot_Widget
 from Ui_MainWindow import Ui_MainWindow
 from Dialog_Para_radar import Dialog_para_radar
 from Dialog_Para_env import Dialog_para_env
 from Dialog_para_platform import Dialog_para_platform
 from Glissant_Menu import Glissant_Menu
-from logDistribution import LogDistribution
+#from logDistribution import LogDistribution
 from SeaDataGenertor import SeaData
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 from doppler import Doppler
@@ -45,7 +45,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #################### setUp data genertors########################
         self.seaDataGen = SeaData(self.sys_info)
         self.nrlDataGen = NRL_SigmaSea_Calculeur(self.sys_info)
-        self.log_normal = LogDistribution(self.sys_info)
+        #self.log_normal = LogDistribution(self.sys_info)
         self.doppler = Doppler(self.sys_info)
         self.doppler_count = 0
         self.logReturnRadar = LogReturnRadar(self.sys_info)
@@ -118,18 +118,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setup3DPlotWidget()
         
     def setupDopplerWidget(self):
-        self.doppler_plot_widget = Plot_Widget(self.widget_24)
+        self.doppler_plot_widget = Plot_Widget(self.widget_22)
         self.doppler_plot_widget.set_facecolor('black')
         self.doppler_plot_widget.setPara('time doppler','m/s', 'Amplitude')
     def setupLogReturnRadarWidget(self):
-        self.logReturnRadar_plot_widget = Plot_Widget(self.widget_21)
+        self.logReturnRadar_plot_widget = Plot_Widget(self.widget_18)
         self.dopplerRes_widget = self.logReturnRadar_plot_widget
         self.dopplerRes_widget.set_facecolor('black')
         self.dopplerRes_widget.setPara('time doppler','m/s', 'time')
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
-        self.plot3d_z_widget = MayaviQWidget(self.sys_info, self.widget_13, 0)
-        self.plot3d_nrl_widget = MayaviQWidget(self.sys_info, self.widget_19, 1)
+        self.plot3d_z_widget = MayaviQWidget(self.sys_info, self.widget_19, 0)
+        self.plot3d_nrl_widget = MayaviQWidget(self.sys_info, self.widget_13, 1)
     def close3DPlotWidget(self):
         self.plot3d_z_widget.close()
         self.plot3d_nrl_widget.close()
@@ -156,7 +156,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plotStatisticThread.start()
         
     def plotDopplerRealTime(self):
-        self.doppler.calcul(0)
         self.plotDopplerThread = plotDopplerThread(self)
         self.plotDopplerThread.start()
     
@@ -179,8 +178,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.update_AmStDisModel()
         
+    def updateSize(self):
+        self.plot3d_z_widget.updateSize()
+        self.plot3d_nrl_widget.updateSize()
+        self.plot_widget1.resize(self.plot_widget1.parent().size())
+        self.plot_widget2.resize(self.plot_widget2.parent().size())
+        self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
+        self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
 
     def resizeEvent(self, event):
+        self.glissant_menu.adjust()
         if self.stackedWidget_2.currentIndex() ==  0:
            self.plot_widget1.resize(self.plot_widget1.parent().size())
            self.plot_widget2.resize(self.plot_widget2.parent().size())
@@ -204,6 +211,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.plot3d_nrl_widget.updateSize()
             self.plot_widget1.resize(self.plot_widget1.parent().size())
             self.plot_widget2.resize(self.plot_widget2.parent().size())
+            self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
+            self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
 
     @pyqtSlot()
     def on_action_triggered(self):
@@ -258,6 +267,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plotRun = True
         self.plot3D()
         self.plotRealtimeStatistic()
+        self.plotDopplerRealTime()
         self.action_7.setEnabled(True)
         self.action_2.setEnabled(False)
         
@@ -310,22 +320,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         self.stackedWidget_2.setCurrentIndex(0)
     
-    @pyqtSlot()
-    def on_action_13_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(4)
-        self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
-        self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
-        self.plotDopplerRealTime()
+
         
     def lancer():
         import sys
         app = QtWidgets.QApplication(sys.argv)
         mainWindow = MainWindow()
         mainWindow.show()
-        #mainWindow.resize(880, 600)
+        # adaptation here
+        width, height = QApplication.desktop().width(), QApplication.desktop().height()
+        # 先move再resize, 逻辑很重要
+        mainWindow.move(width*0.1, height*0.1)
+        mainWindow.resize(width*0.8, height*0.8)
         sys.exit(app.exec_())
     
     @pyqtSlot()

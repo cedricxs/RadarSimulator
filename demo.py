@@ -1,12 +1,18 @@
 import numpy as np
-#x, y = np.meshgrid(np.arange(-3, 3, 0.05),  np.arange(-2, 2, 0.05))
-#x, y = np.transpose(x), np.transpose(y)
-#z = x*np.exp(-x**2-y**2)
+import os
+import PyQt5
+dirname = os.path.dirname(PyQt5.__file__)
+plugin_path = os.path.join(dirname, 'Qt','plugins', 'platforms')
+os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
+x, y = np.meshgrid(np.arange(-3, 3, 0.05),  np.arange(-2, 2, 0.05))
+x, y = np.transpose(x), np.transpose(y)
+z = x*np.exp(-x**2-y**2)
 ## View it.
 from mayavi import mlab
 from mpl_toolkits.mplot3d import Axes3D
-#s = mlab.surf(x, y, z)
-#mlab.show()
+s = mlab.surf(x, y, z)
+mlab.show()
+'''
 #x, y = np.mgrid[0:3:1,0:3:1]
 #s = mlab.surf(x, y, np.asarray(x*0.1, 'd'))
 #
@@ -39,7 +45,7 @@ from mpl_toolkits.mplot3d import Axes3D
 #    scalars = np.sin(mu + np.pi*(i+1)/5)
 #    ms.trait_set(x=x, scalars=scalars)
 from logReturnRadar import LogReturnRadar
-from mayavi.mlab import  surf
+#from mayavi.mlab import  surf
 #@mlab.show
 #@mlab.animate(delay = 100, ui = True)
 #def updateAnimation():
@@ -86,7 +92,7 @@ while True:
 ax.plot_surface(x, y, data[0], rstride=1, cstride=1, cmap='jet')
 ax.set_xlabel('azimuth')
 ax.set_ylabel('range')
-ax.set_zlabel('amplitude')
+ax.set_zlabel('amplitude') 
 #ax1 = fig.add_subplot(421)
 #ax1.pcolormesh(x,y,data[0], cmap='jet')
 #ax2 = fig.add_subplot(422)
@@ -103,8 +109,9 @@ ax.set_zlabel('amplitude')
 #ax7.pcolormesh(x,y,data[6], cmap='jet')
 #ax8 = fig.add_subplot(428)
 #ax8.pcolormesh(x,y,data[7], cmap='jet')
-plt.show()
+#plt.show()
 #obj = surf(x, y, data, colormap='blue-red')
 
 #updateAnimation()
 #mlab.show()
+ '''

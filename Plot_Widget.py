@@ -46,40 +46,43 @@ class Plot_Widget(FigureCanvasQTAgg):
         self.axe.set_ylabel(self.axe_ylabel, fontsize='x-small', color='white', fontweight='semibold')
         #self.axe.grid()
     def updateData(self, data):
-        if type(data).__name__=='list':
-#            # u and v are parametric variables.
-#            # u is an array from 0 to 2*pi, with 100 elements
-#            u=r_[0:2*pi:100j]
-#            # v is an array from 0 to 2*pi, with 100 elements
-#            v=r_[0:pi:100j]
-#            # x, y, and z are the coordinates of the points for plotting
-#            # each is arranged in a 100x100 array
-#            x=10*outer(cos(u),sin(v))
-#            y=10*outer(sin(u),sin(v))
-#            z=10*outer(ones(size(u)),cos(v))
-#            self.axe = p3.Axes3D(self.figure)
-#            self.axe.plot3D(ravel(x),ravel(y),ravel(z))
-            
-            x = data[0]
-            y = data[1]
-            if(len(x)!=len(y)):
-                min_len = min(len(x), len(y))
-                x, y = x[:min_len], y[:min_len]
-            self.axe.cla()
-            self.resetAxisInfo()
-            self.axe.plot(x, y, 'k', color='orange',  linewidth=1, label="Original Data")
-            if len(data) == 4:
-                y_th = data[2]
-                if(len(x)!=len(y_th)):
-                    min_len = min(len(x), len(y_th))
-                    x, y_th = x[:min_len], y_th[:min_len]
-                model, err = data[3]
-                self.axe.plot(x, y_th, 'k--', color='blue',  linewidth=1, label="Best Model {} {}".format(DistributionModel(model).name, format(err, '.2f')))
-            self.axe.legend(loc='upper right', shadow=False, fontsize='small')
-        else:
-            self.lines = self.axe.plot(data, '-', color='blue', linewidth=1)
-        self.draw()
-        self.clean = False
+        try:
+            if type(data).__name__=='list':
+    #            # u and v are parametric variables.
+    #            # u is an array from 0 to 2*pi, with 100 elements
+    #            u=r_[0:2*pi:100j]
+    #            # v is an array from 0 to 2*pi, with 100 elements
+    #            v=r_[0:pi:100j]
+    #            # x, y, and z are the coordinates of the points for plotting
+    #            # each is arranged in a 100x100 array
+    #            x=10*outer(cos(u),sin(v))
+    #            y=10*outer(sin(u),sin(v))
+    #            z=10*outer(ones(size(u)),cos(v))
+    #            self.axe = p3.Axes3D(self.figure)
+    #            self.axe.plot3D(ravel(x),ravel(y),ravel(z))
+                
+                x = data[0]
+                y = data[1]
+                if(len(x)!=len(y)):
+                    min_len = min(len(x), len(y))
+                    x, y = x[:min_len], y[:min_len]
+                self.axe.cla()
+                self.resetAxisInfo()
+                self.axe.plot(x, y, 'k', color='orange',  linewidth=1, label="Original Data")
+                if len(data) == 4:
+                    y_th = data[2]
+                    if(len(x)!=len(y_th)):
+                        min_len = min(len(x), len(y_th))
+                        x, y_th = x[:min_len], y_th[:min_len]
+                    model, err = data[3]
+                    self.axe.plot(x, y_th, 'k--', color='blue',  linewidth=1, label="Best Model {} {}".format(DistributionModel(model).name, format(err, '.2f')))
+                self.axe.legend(loc='upper right', shadow=False, fontsize='small')
+            else:
+                self.lines = self.axe.plot(data, '-', color='blue', linewidth=1)
+            self.draw()
+            self.clean = False
+        except:
+            pass
 
     def draw_doppler(self, x, y):
         self.axe.cla()
@@ -97,7 +100,7 @@ class Plot_Widget(FigureCanvasQTAgg):
     def draw_dopplerResult(self, z):
         self.axe.cla()
         self.resetAxisInfo()
-        self.axe.pcolormesh(self.dopplerResultX, self.dopplerResultY, z, cmap='cubehelix')
+        self.axe.pcolormesh(self.dopplerResultX, self.dopplerResultY, z, cmap='cubehelix',shading='auto')
         self.draw()
         self.clean = False
     

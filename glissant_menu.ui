@@ -2,11 +2,14 @@
 <ui version="4.0">
  <class>Glissant_Menu</class>
  <widget class="QDialog" name="Glissant_Menu">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
+    <width>273</width>
     <height>322</height>
    </rect>
   </property>
@@ -16,71 +19,61 @@
     <height>0</height>
    </size>
   </property>
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
   <property name="mouseTracking">
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>滑动菜单</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
   </property>
   <property name="styleSheet">
    <string notr="true">QDialog#Dialog{background-image:url(:/img/image_dialog.jpg);
 border-radius: 20px}</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
   </property>
   <property name="modal">
    <bool>false</bool>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QWidget" name="widget_2" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
+    <widget class="QCommandLinkButton" name="commandLinkButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
      <property name="maximumSize">
       <size>
        <width>20</width>
-       <height>999</height>
+       <height>16777215</height>
       </size>
      </property>
-     <property name="styleSheet">
-      <string notr="true">QWidget#widget_2{border-image:url(:/img/image_glissant.png)}</string>
+     <property name="text">
+      <string>&gt;&gt;</string>
      </property>
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="geometry">
-       <rect>
-        <x>-10</x>
-        <y>0</y>
-        <width>31</width>
-        <height>321</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>20</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"> </string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="flat">
-       <bool>true</bool>
-      </property>
-     </widget>
     </widget>
    </item>
    <item>
     <widget class="QWidget" name="widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="mouseTracking">
       <bool>true</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">QWidget#widget{background-image:url(:/img/image_dialog.jpg)}</string>
+      <string notr="true">QWidget#widget{background-image:url(:/img/image_dialog.png)}</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -160,6 +153,9 @@ border-radius: 20px}</string>
         <property name="text">
          <string>后向散射系数平面</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -173,6 +169,9 @@ border-radius: 20px}</string>
         <property name="text">
          <string>杂波统计图</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -185,6 +184,9 @@ border-radius: 20px}</string>
         </property>
         <property name="text">
          <string>多普勒图</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

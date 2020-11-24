@@ -17,7 +17,7 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <property name="styleSheet">
-      <string notr="true">QWidget#widget{background-image:url(:/img/image_dialog.jpg)}</string>
+      <string notr="true">QWidget#widget{background-image:url(:/img/image_dialog.png)}</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
