@@ -1,4 +1,5 @@
 import numpy as np
+from TargetGenerator import TargetGenertor
 class NRL_SigmaSea_Calculeur:
     __instance = None
     def getInstance():
@@ -20,6 +21,7 @@ class NRL_SigmaSea_Calculeur:
         #% Pol='V';
         #% Psi=0:90;
         #% ThWind=0;
+        self.targetGenertor = TargetGenertor.getInstance()
         self.sys_info = sys_info
         self.Psi_rad = np.deg2rad(self.sys_info.Psi)
         self.sample_data = []
@@ -40,26 +42,30 @@ class NRL_SigmaSea_Calculeur:
         else:
             print('invalid polarization')
             
-    def calculer(self, seaHeight):
+    def getNrlData(self, seaHeight):
         self.seaHeight = seaHeight
         import time
         start = time.time()
         self.determinerSS()
         if type(self.sys_info.Psi).__name__ == 'float':
             self.determinerPsi()
-        self.preciserPsi()
-        self.SigZ = self.CC1 + self.CC2*np.log10(np.sin(self.Psi_rad)) + (27.5+self.CC3*self.sys_info.Psi)*np.log10(self.sys_info.fGHz)/ (1.+0.95*self.sys_info.Psi) + self.CC4*(self.SS+1)**(1.0 /(2+0.085*self.sys_info.Psi+0.033*self.SS))+self.CC5*self.sys_info.Psi**2;
+        self.SigZ = self.CC1 + self.CC2*np.log10(np.sin(self.Psi_rad)) + (27.5+self.CC3*self.sys_info.Psi)*np.log10(self.sys_info.fGHz)/ (1.+0.95*self.sys_info.Psi) + self.CC4*(self.SS+1)**(1.0 /(2+0.085*self.sys_info.Psi+0.033*self.SS))+self.CC5*self.sys_info.Psi**2
+        self.plusTarget()
         self.sample()
         print("calculer nrl:"+str(time.time()-start))
         return self.SigZ
         #return self.getReturnRadar()
         
     def sample(self):
-        self.sample_data.append(abs(self.SigZ[int(self.SigZ.shape[0]/2)][int(self.SigZ.shape[1]/2)]))
+        #显示未修正的入射角
+        #采集数据时再修正
+        [x, y, Psi, rad_Psi] = self.preciserPsi()
+        sampledValue = self.CC1 + self.CC2*np.log10(np.sin(rad_Psi)) + (27.5+self.CC3*Psi)*np.log10(self.sys_info.fGHz)/ (1.+0.95*Psi) + self.CC4*(self.SS[x][y]+1)**(1.0 /(2+0.085*Psi+0.033*self.SS[x][y]))+self.CC5*Psi**2
+        self.sample_data.append(abs(sampledValue))
     def determinerPsi(self):
         c = 3e8
         t = 2e-7
-        acc_Psi = np.zeros([len(self.seaHeight), len(self.seaHeight[0])]);
+        acc_Psi = np.zeros([len(self.seaHeight), len(self.seaHeight[0])])
         acc_Psi[0, :] = self.sys_info.Psi
         for x in range(1, acc_Psi.shape[0]):
             acc_Psi[x, :] = self.sys_info.Psi+np.arccos((c*t)/(2*(int(x/10)+1)*30))
@@ -81,11 +87,13 @@ class NRL_SigmaSea_Calculeur:
         if rad_Psi>np.pi/2:
             rad_Psi = rad_Psi-np.pi/2
         Psi = np.rad2deg(rad_Psi)
-        self.sys_info.Psi[x][y] = Psi
-        self.Psi_rad[x][y] = rad_Psi    
-        #print("after preciser: "+str(rad_Psi))   
+        #此处不再保存修正的入射角,只是用来采样修正
+        #self.sys_info.Psi[x][y] = Psi
+        #self.Psi_rad[x][y] = rad_Psi    
+        #print("after preciser: "+str(rad_Psi))  
+        return [x, y, Psi, rad_Psi] 
     def determinerSS(self):
-        self.SS = np.zeros([len(self.seaHeight), len(self.seaHeight[0])]);
+        self.SS = np.zeros([len(self.seaHeight), len(self.seaHeight[0])])
         for i in range(len(self.seaHeight)):
             for j in range(len(self.seaHeight[0])):
                 if 0<self.seaHeight[i][j]<1:
@@ -103,6 +111,9 @@ class NRL_SigmaSea_Calculeur:
                 elif 20<self.seaHeight[i][j]<40:
                     self.SS[i][j] = 7
         
+    def plusTarget(self):
+        self.targetGenertor.generateTarget(self.SigZ)
+
     def getReturnRadar(self):
         # %radar  function
         # function [snr] = radar_eq(pt,freq,g,sigma,te,b,nf,loss,range)

@@ -1,4 +1,5 @@
 import numpy as np
+from TargetGenerator import TargetGenertor
 class SeaData:
     __instance = None
     def getInstance():
@@ -7,10 +8,11 @@ class SeaData:
     def __init__(self, sys_info):
         SeaData.__instance = self
         self.sys_info = sys_info
+        self.targetGenertor = TargetGenertor.getInstance()
         self.fengji = sys_info.fengji
-        self.pinpushu=4;
-        self.jiaodushu=30;
-        self.h=2.8;
+        self.pinpushu=4
+        self.jiaodushu=30
+        self.h=2.8
 
         self.wavewmin = np.array([2.438306, 1.462983, 1.044989, 0.812770, 0.664988, 0.562683, 0.487659, 0.430288]);
         self.wavewmax = np.array([16.444115, 9.866469, 7.047480, 5.481373, 4.484760, 3.794799, 3.288826, 2.90190]);
@@ -21,23 +23,23 @@ class SeaData:
         if self.fengji<1:
             self.fengji=1
         dx, dy = 3, 3
-        x = range(0, 300, dx);
-        y = range(0, 300, dy);
+        x = range(0, 300, dx)
+        y = range(0, 300, dy)
         self.x, self.y = np.mgrid[x,y]
-        self.z_zeros = np.zeros([len(self.x), len(self.x[0])]);
+        self.z_zeros = np.zeros([len(self.x), len(self.x[0])])
         self.fi=self.fengji
         self.wmin=self.wavewmin[self.fi-1]
         self.wmax=self.wavewmax[self.fi-1]
         self.wp=self.wavewp[self.fi-1]
-        self.ui=self.u[self.fi-1];
-        self.M=self.pinpushu;
-        self.N=self.jiaodushu;
-        self.wavewn=(self.wmax-self.wmin)/self.M;
-        self.thetawn=np.pi/self.N;
+        self.ui=self.u[self.fi-1]
+        self.M=self.pinpushu
+        self.N=self.jiaodushu
+        self.wavewn=(self.wmax-self.wmin)/self.M
+        self.thetawn=np.pi/self.N
         self.theta=[np.abs(-np.pi/2+ki*self.thetawn) for ki in range(self.N)]#改，加了绝对值
         self.ctheta9 = np.cos(self.theta)/9.8
         self.stheta9 = np.sin(self.theta)/9.8
-        self.w=[self.wmin+wi*self.wavewn+self.wavewn/2 for wi in range(self.M)];
+        self.w=[self.wmin+wi*self.wavewn+self.wavewn/2 for wi in range(self.M)]
         self.w2x = [(w**2)*self.x for w in self.w]
         self.w2y = [(w**2)*self.y for w in self.w]
         self.ss=[0.78/(w*5)*np.exp(-3.12/(self.h**2)/(w**4)) for w in self.w]#ITTC谱，h为三一波高
@@ -51,20 +53,20 @@ class SeaData:
             self.fengji=8
         if self.fengji<1:
             self.fengji=1
-        self.z_zeros = np.zeros([len(self.x), len(self.x[0])]);
+        self.z_zeros = np.zeros([len(self.x), len(self.x[0])])
         self.fi=self.fengji
         self.wmin=self.wavewmin[self.fi-1]
         self.wmax=self.wavewmax[self.fi-1]
         self.wp=self.wavewp[self.fi-1]
-        self.ui=self.u[self.fi-1];
-        self.M=self.pinpushu;
-        self.N=self.jiaodushu;
-        self.wavewn=(self.wmax-self.wmin)/self.M;
-        self.thetawn=np.pi/self.N;
+        self.ui=self.u[self.fi-1]
+        self.M=self.pinpushu
+        self.N=self.jiaodushu
+        self.wavewn=(self.wmax-self.wmin)/self.M
+        self.thetawn=np.pi/self.N
         self.theta=[np.abs(-np.pi/2+ki*self.thetawn) for ki in range(self.N)]#改，加了绝对值
         self.ctheta9 = np.cos(self.theta)/9.8
         self.stheta9 = np.sin(self.theta)/9.8
-        self.w=[self.wmin+wi*self.wavewn+self.wavewn/2 for wi in range(self.M)];
+        self.w=[self.wmin+wi*self.wavewn+self.wavewn/2 for wi in range(self.M)]
         self.w2x = [(w**2)*self.x for w in self.w]
         self.w2y = [(w**2)*self.y for w in self.w]
         self.ss=[0.78/(w*5)*np.exp(-3.12/(self.h**2)/(w**4)) for w in self.w]#ITTC谱，h为三一波高
@@ -76,6 +78,7 @@ class SeaData:
         import time 
         start = time.time()
         self.z = self.fuc()
+        self.targetGenertor.generateTarget(self.z)
         print("generetor sea data:"+str(time.time()-start))
         return [self.x, self.y, self.z]
             

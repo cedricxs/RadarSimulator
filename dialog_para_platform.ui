@@ -17,9 +17,24 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <property name="styleSheet">
-      <string notr="true">QWidget#widget{background-image:url(:/img/image_dialog.png)}</string>
+      <string notr="true">QWidget#widget{background-image:url(:/img/dialog.png)}</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>1</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_30">
         <item>
@@ -124,7 +139,7 @@
            <string notr="true">QLabel#label_46{color:white}</string>
           </property>
           <property name="text">
-           <string>  经度</string>
+           <string>  经度 </string>
           </property>
          </widget>
         </item>
@@ -204,7 +219,7 @@
            <string notr="true">QLabel#label_46{color:white}</string>
           </property>
           <property name="text">
-           <string>  纬度</string>
+           <string>  纬度 </string>
           </property>
          </widget>
         </item>
@@ -284,7 +299,7 @@
            <string notr="true">QLabel#label_46{color:white}</string>
           </property>
           <property name="text">
-           <string> 高度</string>
+           <string> 高度 </string>
           </property>
          </widget>
         </item>

@@ -17,7 +17,6 @@ class TimeObservable(Observable):
         self.oldTime = self.value
     def notifyAll(self):
         for observateur in self.observateurs:
-            print(observateur.time())
             observateur.setTime(observateur.time().addSecs(self.value-self.oldTime))
         self.oldTime = self.value
                 
@@ -26,7 +25,7 @@ class SeaDataObservable(Observable):
         super().__init__()
     def notifyAll(self):
         for observateur in self.observateurs:
-            observateur.update(self.value)
+            observateur.updateView(self.value)
                 
 class Observateur:
     def __init__(self):

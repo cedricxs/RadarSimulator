@@ -10,7 +10,7 @@ class Doppler:
         Doppler.__instance = self
         self.sys_info = sys_info  
         import netCDF4
-        self.file = r'radar\#310_19931118_162155_stareC0000.cdf'
+        self.file = r'#310_19931118_162155_stareC0000.cdf'
         self.content = netCDF4.Dataset(self.file)
         #print(content)
         #print(content.variables['adc_data'].shape)#显示nc文件的所有结构，以便大概了解里面的内容

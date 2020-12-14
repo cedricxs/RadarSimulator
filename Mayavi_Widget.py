@@ -11,7 +11,7 @@ from pyface.qt import QtGui
 from traits.api import HasTraits, Instance, on_trait_change
 from traitsui.api import View, Item
 from mayavi.core.ui.api import MayaviScene, MlabSceneModel, SceneEditor
-from SeaDataGenertor import SeaData
+from SeaDataGenerator import SeaData
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 
 ## create Mayavi Widget and show
@@ -34,11 +34,11 @@ class Visualization(HasTraits):
         self.figure.scene.render_window.point_smoothing = True
         self.figure.scene.render_window.line_smoothing = True
         self.figure.scene.render_window.polygon_smoothing = True
-        self.figure.scene.render_window.multi_samples = 8 # Try with 4 if you think this is slow
+        self.figure.scene.render_window.multi_samples = 4
         self.figure.scene.anti_aliasing_frames = True
         self.figure.scene.background = (0, 0, 0)
         x, y , z = SeaData.getInstance().getSeaData()
-        nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
+        nrl = NRL_SigmaSea_Calculeur.getInstance().getNrlData(z)
         if self.plotType == 0:
             self.obj = surf(x, y,z,colormap='ocean')
             #mlab.colorbar(object=self.obj,title='sea surface')
@@ -71,11 +71,12 @@ class MayaviQWidget(QtGui.QWidget):
         self.ui.resize(parent.size())
         
     def updateSize(self):
+        #print(self.parent().size())
         self.resize(self.parent().size())
         self.ui.resize(self.parent().size()) 
         
     #here data is z or nrl
-    def update(self, data):
+    def updateView(self, data):
         self.visualization.obj.mlab_source.scalars = data
 
     def close(self):

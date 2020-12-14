@@ -1,5 +1,5 @@
 from Observer import TimeObservable, SeaDataObservable
-from SeaDataGenertor import SeaData
+from SeaDataGenerator import SeaData
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 class System_Infomations():
     def __init__(self):
@@ -33,7 +33,7 @@ class System_Infomations():
     def initialize(self):
         self.timestamp.set(0)
         x, y, z = SeaData.getInstance().getSeaData()
-        nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
+        nrl = NRL_SigmaSea_Calculeur.getInstance().getNrlData(z)
         print('for sys')
         self.x = x
         self.y = y

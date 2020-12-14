@@ -5,7 +5,7 @@ Module implementing MainWindow.
 """
 
 from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5 import  QtWidgets
+from PyQt5 import  QtWidgets,QtCore
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QApplication
 from Plot_Widget import Plot_Widget
 from Ui_MainWindow import Ui_MainWindow
@@ -14,7 +14,7 @@ from Dialog_Para_env import Dialog_para_env
 from Dialog_para_platform import Dialog_para_platform
 from Glissant_Menu import Glissant_Menu
 #from logDistribution import LogDistribution
-from SeaDataGenertor import SeaData
+from SeaDataGenerator import SeaData
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
 from doppler import Doppler
 from logReturnRadar import LogReturnRadar
@@ -23,8 +23,9 @@ from System_Infomations import System_Infomations
 from PlotThread import plotStatisticThread, plotDopplerThread, plotMayaviThread 
 from FitModel import ModelFitter
 import csv
-                
-        
+import multiprocessing   
+from TargetGenerator import TargetGenertor
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
     Class documentation goes here.
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sys_info = System_Infomations()
         
         #################### setUp data genertors########################
+        self.targetGen = TargetGenertor()
         self.seaDataGen = SeaData(self.sys_info)
         self.nrlDataGen = NRL_SigmaSea_Calculeur(self.sys_info)
         #self.log_normal = LogDistribution(self.sys_info)
@@ -66,8 +68,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.dialog_para_radar = Dialog_para_radar(self.sys_info, self)
         self.dialog_para_env = Dialog_para_env(self.sys_info, self)
         self.dialog_para_platform = Dialog_para_platform(self.sys_info, self)
-        self.glissant_menu = Glissant_Menu(self.sys_info, self)
-        self.glissant_menu.show()
+        #self.glissant_menu = Glissant_Menu(self.sys_info, self)
+        #self.glissant_menu.show()
         self.action_7.setEnabled(False)
         
         ################### Connect All Relation of Observer####################
@@ -77,38 +79,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sys_info.nrl.addObservateur(self.plot3d_nrl_widget)
         ######################触发更新所有视图###########################
         self.sys_info.initialize() 
+
+        #self.pool=multiprocessing.Pool(4)
     #def updateLayout(self):
         
     def setupAllPlotWidget(self):
         
         ####################### RealTime 海杂波数据 Index 0#####################
-        self.plot_widget1 = Plot_Widget(self.widget_14)
-        self.plot_widget2 = Plot_Widget(self.widget_15)
-        self.plot_widget1.set_facecolor('black')
-        self.plot_widget2.set_facecolor('black')
-        #self.plot_widget3 = Plot_Widget(self.widget_1)
-        
-        self.plot_widget1.setPara('real time sea clutter', 'Time', 'Amplitude')
-        self.plot_widget2.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
-        #self.plot_widget3.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
-
-        ####################### 幅度统计分布模型log分布 Index 1#####################
-        self.plot_widget4 = Plot_Widget(self.widget_4)
-        self.plot_widget5 = Plot_Widget(self.widget_6)
-        self.plot_widget6 = Plot_Widget(self.widget_2)
-
-        self.plot_widget4.setPara('real time sea clutter', 'Time', 'Amplitude')
-        self.plot_widget5.setPara('Probability Distribution', 'Amplitude', 'Probability Density')
-        self.plot_widget6.setPara('Spectrum', 'Frquency', 'Power Spectral Density')
-        ####################### 空 Index 2#####################
-        self.plot_widget7 = Plot_Widget(self.widget_7)
-        self.plot_widget8 = Plot_Widget(self.widget_8)
-        self.plot_widget9 = Plot_Widget(self.widget_9)
-
-        ####################### 空 Index 3#####################
-        self.plot_widget10 = Plot_Widget(self.widget_10)
-        self.plot_widget11 = Plot_Widget(self.widget_11)
-        self.plot_widget12 = Plot_Widget(self.widget_12)
+        self.setupRealTimePlotWidget()
         
         ####################### 多普勒和对数回波强度 Index 4#####################
         self.setupDopplerWidget()
@@ -116,7 +94,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         ####################### 海平面和后向散射系数三维图 Index 5#####################
         self.setup3DPlotWidget()
-        
+    
+    def setupRealTimePlotWidget(self):
+        self.plot_widget1 = Plot_Widget(self.widget_14)
+        self.plot_widget2 = Plot_Widget(self.widget_15)
+        self.plot_widget1.set_facecolor('black')
+        self.plot_widget2.set_facecolor('black')
+        self.plot_widget1.setPara('real time sea clutter', '', 'Amplitude')
+        self.plot_widget2.setPara('Probability Distribution', '', 'Probability Density')
+
     def setupDopplerWidget(self):
         self.doppler_plot_widget = Plot_Widget(self.widget_22)
         self.doppler_plot_widget.set_facecolor('black')
@@ -126,10 +112,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.dopplerRes_widget = self.logReturnRadar_plot_widget
         self.dopplerRes_widget.set_facecolor('black')
         self.dopplerRes_widget.setPara('time doppler','m/s', 'time')
+
     def setup3DPlotWidget(self):
         #self.plot3d_widget = Plot_Widget3D_Matplt(self.widget_18)
         self.plot3d_z_widget = MayaviQWidget(self.sys_info, self.widget_19, 0)
         self.plot3d_nrl_widget = MayaviQWidget(self.sys_info, self.widget_13, 1)
+
     def close3DPlotWidget(self):
         self.plot3d_z_widget.close()
         self.plot3d_nrl_widget.close()
@@ -137,18 +125,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def plot3D(self):
         self.plotMayaviThread = plotMayaviThread(self)
         self.plotMayaviThread.start()
-    def update_AmStDisModel(self):
-        self.stackedWidget_2.setCurrentIndex(1)
-        self.plot_widget4.resize(self.plot_widget4.parent().size())
-        self.plot_widget5.resize(self.plot_widget5.parent().size())
-        self.plot_widget6.resize(self.plot_widget6.parent().size())
-        self.log_normal.updateData()
-        xaxis, xdata = self.log_normal.xaxis, self.log_normal.xdata
-        xaxis1, xpdf1, th_val = self.log_normal.xaxis1, self.log_normal.xpdf1, self.log_normal.th_val
-        fre, psd, powerf = self.log_normal.freqx, self.log_normal.psd_dat, self.log_normal.powerf
-        self.plot_widget4.updateData([xaxis, xdata])
-        self.plot_widget5.updateData([xaxis1, xpdf1, th_val])
-        self.plot_widget6.updateData([fre, psd, powerf])   
     
     def plotRealtimeStatistic(self):
         #self.plot_widget1.start_animation()
@@ -173,11 +149,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     @pyqtSlot()
     def on_pushButton_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        self.update_AmStDisModel()
+        self.startRun()
         
+    @pyqtSlot()
+    def on_pushButton_2_clicked(self):
+        self.pauseRun()
+
+
     def updateSize(self):
         self.plot3d_z_widget.updateSize()
         self.plot3d_nrl_widget.updateSize()
@@ -187,53 +165,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
 
     def resizeEvent(self, event):
-        self.glissant_menu.adjust()
         if self.stackedWidget_2.currentIndex() ==  0:
-           self.plot_widget1.resize(self.plot_widget1.parent().size())
-           self.plot_widget2.resize(self.plot_widget2.parent().size())
-           #self.plot_widget3.resize(self.plot_widget3.parent().size())
-        elif self.stackedWidget_2.currentIndex() ==  1:
-           self.plot_widget4.resize(self.plot_widget4.parent().size())
-           self.plot_widget5.resize(self.plot_widget5.parent().size())
-           self.plot_widget6.resize(self.plot_widget6.parent().size())
-        elif self.stackedWidget_2.currentIndex() ==  2:
-           self.plot_widget7.resize(self.plot_widget7.parent().size())
-           self.plot_widget8.resize(self.plot_widget8.parent().size())
-           self.plot_widget9.resize(self.plot_widget9.parent().size())
-        elif self.stackedWidget_2.currentIndex() ==  3:
-           self.plot_widget10.resize(self.plot_widget10.parent().size())
-           self.plot_widget11.resize(self.plot_widget11.parent().size())
-           self.plot_widget12.resize(self.plot_widget12.parent().size())
-        elif self.stackedWidget_2.currentIndex() ==  4:
-            self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
-        elif self.stackedWidget_2.currentIndex() ==  5:
-            self.plot3d_z_widget.updateSize()
-            self.plot3d_nrl_widget.updateSize()
-            self.plot_widget1.resize(self.plot_widget1.parent().size())
-            self.plot_widget2.resize(self.plot_widget2.parent().size())
-            self.doppler_plot_widget.resize(self.doppler_plot_widget.parent().size())
-            self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
-
-    @pyqtSlot()
-    def on_action_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.dialog_para_radar.show()
-    
-    @pyqtSlot()
-    def on_action_3_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.dialog_para_platform.show()
-    
-    @pyqtSlot()
-    def on_action_5_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.dialog_para_env.show()
+            self.updateSize()
     
     @pyqtSlot()
     def on_pushButton_5_clicked(self):
@@ -255,16 +188,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.dialog_para_env.show()
-    
+
     @pyqtSlot()
-    def on_action_7_triggered(self):
+    def on_pushButton_6_clicked(self):
         """
         Slot documentation goes here.
         """
-        self.pauseRun()
-    
+        filename = QFileDialog.getSaveFileName(self, "保存数据","sea_clutter_data",  "csv (*.csv);;Text files (*.txt);;XML files (*.xml)")
+        if filename[0] != '':
+            self.create_csv(filename[0])
+
+    @pyqtSlot()
+    def on_pushButton_7_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        self.shutdown()
+
     def startRun(self):
         self.plotRun = True
+        # self.pool.apply_async(self.plot3D())
+        # self.pool.apply_async(self.plotRealtimeStatistic())
+        # self.pool.apply_async(self.plotDopplerRealTime())
         self.plot3D()
         self.plotRealtimeStatistic()
         self.plotDopplerRealTime()
@@ -275,20 +220,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plotRun = False
         self.action_7.setEnabled(False)
         self.action_2.setEnabled(True)
-    @pyqtSlot()
-    def on_action_2_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.startRun()
-    
-    @pyqtSlot()
-    def on_action_6_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        filename = QFileDialog.getSaveFileName(self, "保存数据","sea_clutter_data",  "csv (*.csv);;Text files (*.txt);;XML files (*.xml)")
-        self.create_csv(filename[0])
+
     def create_csv(self, filepath):
         if filepath is not None:
             with open(filepath,'w', newline='', encoding='utf-8') as file:
@@ -300,28 +232,54 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 csv_write.writerows([[value] for value in self.nrlDataGen.sample_data])
     
     @pyqtSlot()
-    def on_action_4_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(5)
+    def on_checkBox_clicked(self):
+        if self.checkBox.isChecked() == False:
+            self.plot3d_z_widget.parent().setMaximumSize(QtCore.QSize(0, 0))
+            self.resize(self.width(),self.height()+1)
+            self.checkBox_2.setEnabled(False)
+        else:
+            self.plot3d_z_widget.parent().setMaximumSize(QtCore.QSize(9999, 9999))
+            self.resize(self.width(),self.height()-1)
+            self.checkBox_2.setEnabled(True)
     
     @pyqtSlot()
-    def on_action_9_triggered(self):
+    def on_checkBox_2_clicked(self):
         """
         Slot documentation goes here.
         """
-        self.stackedWidget_2.setCurrentIndex(5)
-    
-    @pyqtSlot()
-    def on_action_11_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        self.stackedWidget_2.setCurrentIndex(0)
-    
+        if self.checkBox_2.isChecked() == False:
+            self.plot3d_nrl_widget.parent().setMaximumSize(QtCore.QSize(0, 0))
+            self.resize(self.width(),self.height()+1)
+            self.checkBox.setEnabled(False)
+        else:
+            self.plot3d_nrl_widget.parent().setMaximumSize(QtCore.QSize(9999, 9999))
+            self.resize(self.width(),self.height()-1)
+            self.checkBox.setEnabled(True)
 
-        
+    @pyqtSlot()
+    def on_checkBox_3_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        if self.checkBox_3.isChecked() == False:
+            self.verticalLayout_2.setStretch(1,0)
+            self.resize(self.width(),self.height()+1)
+        else:
+            self.verticalLayout_2.setStretch(1,1)
+            self.resize(self.width(),self.height()-1)
+
+    @pyqtSlot()
+    def on_checkBox_4_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        if self.checkBox_4.isChecked() == False:
+            self.horizontalLayout_6.setStretch(0,0)
+            self.resize(self.width(),self.height()+1)
+        else:
+            self.horizontalLayout_6.setStretch(0,1)
+            self.resize(self.width(),self.height()-1)
+
     def lancer():
         import sys
         app = QtWidgets.QApplication(sys.argv)
@@ -334,11 +292,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         mainWindow.resize(width*0.8, height*0.8)
         sys.exit(app.exec_())
     
-    @pyqtSlot()
-    def on_action_8_triggered(self):
-        """
-        Slot documentation goes here.
-        """
+    def shutdown(self):
         self.pauseRun()
+        #self.pool.close()
         self.close3DPlotWidget()
         self.close()

@@ -5,7 +5,7 @@ class LogReturnRadar:
     def __init__(self, sys_info):
         self.sys_info = sys_info
         import netCDF4
-        self.file = r'radar\#310_19931118_162155_stareC0000.cdf'
+        self.file = r'#310_19931118_162155_stareC0000.cdf'
         #self.file = '#17_19931107_135603_starea.cdf';
         self.content = netCDF4.Dataset(self.file)
         #print(content)

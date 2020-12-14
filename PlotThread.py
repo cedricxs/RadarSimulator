@@ -3,7 +3,7 @@ import threading
 import time
 from doppler import Doppler
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
-from SeaDataGenertor import SeaData
+from SeaDataGenerator import SeaData
 
 class plotStatisticThread (threading.Thread):   #继承父类threading.Thread
     def __init__(self, parent):
@@ -50,7 +50,7 @@ class plotMayaviThread(threading.Thread):
     def run(self):                   
         while self.parent.plotRun == True:
             x, y , z = SeaData.getInstance().getSeaData()
-            nrl = NRL_SigmaSea_Calculeur.getInstance().calculer(z)
+            nrl = NRL_SigmaSea_Calculeur.getInstance().getNrlData(z)
             self.parent.sys_info.z.set(z)
             self.parent.sys_info.nrl.set(nrl)
             #time.sleep(0.05)

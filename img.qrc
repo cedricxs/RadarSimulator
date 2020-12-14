@@ -1,9 +1,5 @@
 <RCC>
   <qresource prefix="img">
-    <file>w69rlkBnY3.png</file>
-    <file>image_glissant.png</file>
-    <file>5njp9xK6q95.png</file>
-    <file>image_dialog.png</file>
-    <file>5njp9xK6q9.png</file>
+    <file>dialog.png</file>
   </qresource>
 </RCC>
