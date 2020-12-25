@@ -48,19 +48,6 @@ class Plot_Widget(FigureCanvasQTAgg):
     def updateData(self, data):
         try:
             if type(data).__name__=='list':
-    #            # u and v are parametric variables.
-    #            # u is an array from 0 to 2*pi, with 100 elements
-    #            u=r_[0:2*pi:100j]
-    #            # v is an array from 0 to 2*pi, with 100 elements
-    #            v=r_[0:pi:100j]
-    #            # x, y, and z are the coordinates of the points for plotting
-    #            # each is arranged in a 100x100 array
-    #            x=10*outer(cos(u),sin(v))
-    #            y=10*outer(sin(u),sin(v))
-    #            z=10*outer(ones(size(u)),cos(v))
-    #            self.axe = p3.Axes3D(self.figure)
-    #            self.axe.plot3D(ravel(x),ravel(y),ravel(z))
-                
                 x = data[0]
                 y = data[1]
                 if(len(x)!=len(y)):

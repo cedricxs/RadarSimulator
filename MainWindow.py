@@ -30,7 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     """
     Class documentation goes here.
     """
-    def __init__(self, parent=None):
+    def __init__(self, sys_info, parent=None):
         """
         Constructor
         
@@ -39,9 +39,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         #################### setUp All QtDesigner widgets########################
         super(MainWindow, self).__init__(parent)
-        self.setupUi(self)
+        
         #################### setUp system inforamtion########################
-        self.sys_info = System_Infomations()
+        self.sys_info = sys_info
         
         #################### setUp data genertors########################
         self.targetGen = TargetGenertor()
@@ -56,32 +56,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #################### setUp All Plot widgets ########################
         #设置无边框
         self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setupAllPlotWidget()
-    
-        
-        #################### Init default Index########################
-        self.stackedWidget_2.setCurrentIndex(5)
-        
-        #在使用观察者模式后不需要此块
-        #################### Init All information labels########################
-        self.update_para()
-        self.dialog_para_radar = Dialog_para_radar(self.sys_info, self)
-        self.dialog_para_env = Dialog_para_env(self.sys_info, self)
-        self.dialog_para_platform = Dialog_para_platform(self.sys_info, self)
-        #self.glissant_menu = Glissant_Menu(self.sys_info, self)
-        #self.glissant_menu.show()
-        self.action_7.setEnabled(False)
-        
-        ################### Connect All Relation of Observer####################
-        self.sys_info.timestamp.addObservateur(self.timeEdit)
-        self.sys_info.timestamp.addObservateur(self.dialog_para_platform.timeEdit)
-        self.sys_info.z.addObservateur(self.plot3d_z_widget)
-        self.sys_info.nrl.addObservateur(self.plot3d_nrl_widget)
-        ######################触发更新所有视图###########################
-        self.sys_info.initialize() 
+        self.showed = False
 
         #self.pool=multiprocessing.Pool(4)
-    #def updateLayout(self):
+    def show(self):
+        self.move(self.sys_info.desktopWidth*0.1, self.sys_info.desktopHeight*0.1)
+        self.setupUi(self) 
+        self.resize(self.sys_info.desktopWidth*0.8, self.sys_info.desktopHeight*0.8) 
+        super().show()
+        #show之后触发一次resize才能更新子窗口
+        self.resize(self.width(),self.height()+1)
         
     def setupAllPlotWidget(self):
         
@@ -165,7 +149,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.logReturnRadar_plot_widget.resize(self.logReturnRadar_plot_widget.parent().size())
 
     def resizeEvent(self, event):
-        if self.stackedWidget_2.currentIndex() ==  0:
+        if self.showed == False:
+            self.setupAllPlotWidget()
+        
+            
+            #################### Init default Index########################
+            self.stackedWidget_2.setCurrentIndex(0)
+            
+            #在使用观察者模式后不需要此块
+            #################### Init All information labels########################
+            self.update_para()
+            self.dialog_para_radar = Dialog_para_radar(self.sys_info, self)
+            self.dialog_para_env = Dialog_para_env(self.sys_info, self)
+            self.dialog_para_platform = Dialog_para_platform(self.sys_info, self)
+            #self.glissant_menu = Glissant_Menu(self.sys_info, self)
+            #self.glissant_menu.show()
+            self.action_7.setEnabled(False)
+            
+            ################### Connect All Relation of Observer####################
+            self.sys_info.timestamp.addObservateur(self.timeEdit)
+            self.sys_info.timestamp.addObservateur(self.dialog_para_platform.timeEdit)
+            self.sys_info.z.addObservateur(self.plot3d_z_widget)
+            self.sys_info.nrl.addObservateur(self.plot3d_nrl_widget)
+            ######################触发更新所有视图###########################
+            self.sys_info.initialize() 
+            self.showed = True
+            self.updateSize()
+        else:
             self.updateSize()
     
     @pyqtSlot()

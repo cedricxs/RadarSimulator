@@ -1,8 +1,15 @@
-from Observer import TimeObservable, SeaDataObservable
+from Observer import TimeObservable, SeaDataObservable, AppStatusObservable
 from SeaDataGenerator import SeaData
 from NRL_SigmaSea import NRL_SigmaSea_Calculeur
+from TargetGenerator import TargetGenertor
+from PyQt5.QtWidgets import QApplication
 class System_Infomations():
     def __init__(self):
+        self.appStatus = AppStatusObservable()
+        self.desktopWidth,self.desktopHeight = QApplication.desktop().width(), QApplication.desktop().height()
+        self.seafaceColormap = 'ocean'
+        self.radarColormap = 'blue-red'
+        self.hasTarget = False
         #logdistribution
         self.sigmav = 1.0
         self.muc = 1.5
@@ -30,11 +37,14 @@ class System_Infomations():
         self.y = None
         self.z = SeaDataObservable()
         self.nrl = SeaDataObservable()
+        #加载程序组件
+        self.targetGen = TargetGenertor()
+        self.seaDataGen = SeaData(self)
+        self.nrlDataGen = NRL_SigmaSea_Calculeur(self)
     def initialize(self):
         self.timestamp.set(0)
-        x, y, z = SeaData.getInstance().getSeaData()
-        nrl = NRL_SigmaSea_Calculeur.getInstance().getNrlData(z)
-        print('for sys')
+        x, y, z = self.seaDataGen.getSeaData()
+        nrl = self.nrlDataGen.getNrlData(z) 
         self.x = x
         self.y = y
         self.z.set(z)

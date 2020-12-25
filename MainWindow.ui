@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
-    <height>480</height>
+    <width>836</width>
+    <height>415</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,6 +55,21 @@
     <string notr="true">QWidget#centralWidget{margin:0px}</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QWidget" name="widget_17" native="true">
       <property name="sizePolicy">

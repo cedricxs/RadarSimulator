@@ -12,17 +12,17 @@ class TargetGenertor():
         self.x = self.m
         self.y = self.n
         self.v_count = 2
-        self.sig_magnitude = 10
+        self.sig_magnitude = 20
     
-    def generateTarget(self, Plan):
+    def generateTarget(self, targetPlan):
         theta = random.randint(1, 20) * np.pi / 3
         step_x = int(self.v_count * np.cos(theta))                           # 距离向每次移动步长（像素个数）
         step_y = int(self.v_count * np.sin(theta))                           # 方位向每次移动步长（像素个数）
         self.x += step_x
         self.y += step_y
-        if self.x>=len(Plan) or self.x < 0:
+        if self.x>=len(targetPlan) or self.x < 0:
             self.x = self.m
-        if self.y>=len(Plan[0]) or self.y < 0:
+        if self.y>=len(targetPlan[0]) or self.y < 0:
             self.y = self.n
-        Plan[self.x , self.y] += self.sig_magnitude
+        targetPlan[self.x , self.y] += self.sig_magnitude
            

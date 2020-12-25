@@ -26,7 +26,15 @@ class SeaDataObservable(Observable):
     def notifyAll(self):
         for observateur in self.observateurs:
             observateur.updateView(self.value)
-                
+
+class AppStatusObservable(Observable):
+    def __init__(self):
+        super().__init__()
+        self.value = 'loading'
+    def notifyAll(self):
+        for observateur in self.observateurs:
+            observateur.updateView(self.value)
+
 class Observateur:
     def __init__(self):
         self.observer = None

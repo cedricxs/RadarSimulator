@@ -96,8 +96,8 @@ class Doppler:
         #
         #% display image
         if self.sys_info.nargout<1:
-          x_time=[(wdw/2+i*timeStep)/PRF for i in range(M)];
-          freq=np.array([(i/(wdw/yavg)-0.5)*PRF for i in range(math.floor(wdw/yavg))]);
+          x_time=[(wdw/2+i*timeStep)/PRF for i in range(M)]
+          freq=np.array([(i/(wdw/yavg)-0.5)*PRF for i in range(math.floor(wdw/yavg))])
           doppl=freq*3e8/(2*RF_frequency*1e9); 
           doppl = doppl.tolist()
           self.xx, self.yy = np.meshgrid(x_time,doppl)

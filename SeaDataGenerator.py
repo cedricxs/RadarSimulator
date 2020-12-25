@@ -8,7 +8,7 @@ class SeaData:
     def __init__(self, sys_info):
         SeaData.__instance = self
         self.sys_info = sys_info
-        self.targetGenertor = TargetGenertor.getInstance()
+        self.targetGenertor = sys_info.targetGen
         self.fengji = sys_info.fengji
         self.pinpushu=4
         self.jiaodushu=30
@@ -78,7 +78,8 @@ class SeaData:
         import time 
         start = time.time()
         self.z = self.fuc()
-        self.targetGenertor.generateTarget(self.z)
+        if self.sys_info.hasTarget:
+            self.plusTarget()
         print("generetor sea data:"+str(time.time()-start))
         return [self.x, self.y, self.z]
             
@@ -93,3 +94,6 @@ class SeaData:
                 z=an*np.cos(z1)+z
         #z = np.sin(2*x*np.pi/100)*10+np.cos(3*y*np.pi/100)*10
         return z
+    
+    def plusTarget(self):
+        self.targetGenertor.generateTarget(self.z)
